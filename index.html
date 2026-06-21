@@ -2,35 +2,34 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <!-- إعدادات أساسية لضمان عمل الموقع كتطبيق جوال -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#07070a">
-    <title>متجر زينة | الجوال</title>
+    <meta name="theme-color" content="#050508">
+    <title>متجر زينة | التحفة الفنية</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --gold: #D4AF37;
-            --dark: #07070a;
+            /* اللون الأساسي سيتغير برمجياً حسب كل قسم */
+            --theme-color: #D4AF37; 
+            --dark-bg: #050508;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background-color: var(--dark);
+            background-color: var(--dark-bg);
             font-family: 'Amiri', serif;
             color: #fff;
-            /* السر في هذا الكود: جعل الصفحة تنزلق كالتطبيقات */
             scroll-snap-type: y mandatory;
             overflow-y: scroll;
             height: 100vh;
             scroll-behavior: smooth;
+            transition: --theme-color 1s ease; /* انتقال لوني سلس */
         }
 
-        /* إخفاء شريط التمرير الافتراضي لشكل أنظف */
         body::-webkit-scrollbar { display: none; }
 
-        /* كل شاشة تأخذ حجم الجوال بالكامل */
+        /* حاوية الشاشات */
         .screen {
             height: 100vh;
             width: 100vw;
@@ -42,35 +41,40 @@
             justify-content: flex-end;
         }
 
-        /* صورة المنتج الخلفية وملء الشاشة */
+        /* صورة الخلفية مع تأثير التنفس (Breathing Effect) */
         .bg-image {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover; z-index: 1;
-            filter: brightness(0.65);
-            transform: scale(1.1); /* تكبير مبدئي للتأثير الحركي */
-            transition: transform 1.5s ease-out, filter 1.5s ease-out;
+            filter: brightness(0.5) contrast(1.1);
+            transform: scale(1.1);
+            transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1), filter 1.5s ease;
         }
 
-        /* تفعيل التأثير عند ظهور الشاشة */
         .screen.active .bg-image {
             transform: scale(1);
-            filter: brightness(0.85);
+            filter: brightness(0.75) contrast(1.1);
+            animation: breathe 20s infinite alternate linear; /* حركة بطيئة مستمرة */
         }
 
-        /* تدرج لوني أسفل الشاشة لجعل النص مقروءاً */
+        @keyframes breathe {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.08); }
+        }
+
+        /* التدرج اللوني للظلال */
         .overlay {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
-            background: linear-gradient(to top, rgba(7,7,10,0.95) 0%, rgba(7,7,10,0) 100%);
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 70%;
+            background: linear-gradient(to top, var(--dark-bg) 0%, rgba(5,5,8,0.8) 30%, rgba(5,5,8,0) 100%);
             z-index: 2;
         }
 
-        /* محتوى المنتج (يظهر من الأسفل) */
+        /* المحتوى */
         .content {
             position: relative; z-index: 3;
-            padding: 30px 20px 40px;
-            transform: translateY(50px);
+            padding: 30px 25px 60px;
+            transform: translateY(40px);
             opacity: 0;
-            transition: transform 0.8s ease-out 0.3s, opacity 0.8s ease-out 0.3s;
+            transition: transform 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0.2s, opacity 1s ease 0.2s;
         }
 
         .screen.active .content {
@@ -79,169 +83,206 @@
         }
 
         .category {
-            font-family: 'Playfair Display', serif; font-size: 14px;
-            color: var(--gold); letter-spacing: 3px; text-transform: uppercase;
-            margin-bottom: 10px; display: block;
+            font-family: 'Playfair Display', serif; font-size: 12px;
+            color: var(--theme-color); letter-spacing: 4px; text-transform: uppercase;
+            margin-bottom: 15px; display: block;
+            transition: color 1s ease;
         }
 
         .title {
-            font-family: 'Playfair Display', serif; font-size: 38px;
+            font-family: 'Playfair Display', serif; font-size: 42px;
             margin-bottom: 15px; font-weight: 700; line-height: 1.1;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
         .desc {
-            font-size: 16px; color: #d0d0d0; line-height: 1.6;
-            margin-bottom: 30px;
+            font-size: 17px; color: #c4c4c4; line-height: 1.7;
+            margin-bottom: 35px; max-width: 90%;
         }
 
-        /* زر الشراء المخصص لللمس */
+        /* زر الشراء الفاخر */
         .buy-btn {
-            display: flex; align-items: center; justify-content: center;
-            width: 100%; padding: 18px;
-            background-color: var(--gold); color: var(--dark);
-            border-radius: 12px; font-size: 18px; font-weight: bold;
-            text-decoration: none; transition: transform 0.2s;
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 100%; padding: 20px;
+            background-color: transparent; 
+            color: var(--theme-color);
+            border: 1px solid var(--theme-color);
+            border-radius: 0px; /* زوايا حادة للفخامة */
+            font-size: 18px; font-weight: bold;
+            text-decoration: none; 
+            transition: all 0.5s ease;
+            position: relative; overflow: hidden;
         }
-        .buy-btn:active { transform: scale(0.96); }
+        
+        .buy-btn::after {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%; background: var(--theme-color);
+            transition: left 0.4s ease; z-index: -1;
+        }
 
-        /* الشاشة الأولى (الافتتاحية) */
-        .hero-content {
-            position: absolute; top: 50%; left: 50%;
+        .buy-btn:active { transform: scale(0.98); }
+        .buy-btn:active::after { left: 0; }
+        .buy-btn:active { color: var(--dark-bg); }
+
+        /* شريط التقدم الجانبي (Pagination) */
+        .pagination {
+            position: fixed; right: 15px; top: 50%; transform: translateY(-50%);
+            z-index: 100; display: flex; flex-direction: column; gap: 12px;
+        }
+        .dot {
+            width: 4px; height: 4px; background: rgba(255,255,255,0.3);
+            border-radius: 50%; transition: all 0.4s ease;
+        }
+        .dot.active {
+            height: 25px; border-radius: 2px;
+            background: var(--theme-color);
+        }
+
+        /* زر الـ VIP العائم (Concierge) */
+        .vip-concierge {
+            position: fixed; bottom: 30px; left: 20px;
+            width: 55px; height: 55px;
+            background: var(--theme-color);
+            border-radius: 50%; z-index: 100;
+            display: flex; justify-content: center; align-items: center;
+            text-decoration: none; font-size: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            transition: background 1s ease, transform 0.3s ease;
+            animation: pulse-ring 2.5s infinite;
+        }
+        .vip-concierge:active { transform: scale(0.9); }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+
+        /* الشاشة الافتتاحية */
+        .hero-center {
+            position: absolute; top: 40%; left: 50%;
             transform: translate(-50%, -50%);
             z-index: 3; text-align: center; width: 100%;
         }
         .hero-title {
-            font-family: 'Playfair Display', serif; font-size: 50px;
-            color: var(--gold); letter-spacing: 10px;
-            animation: fadeInDown 1.5s ease-out;
+            font-family: 'Cinzel', 'Playfair Display', serif; font-size: 55px;
+            color: var(--theme-color); letter-spacing: 12px;
+            transition: color 1s ease;
         }
         .hero-sub {
-            font-size: 18px; letter-spacing: 3px; margin-top: 15px;
-            color: #fff; animation: fadeInUp 1.5s ease-out 0.5s both;
+            font-size: 16px; letter-spacing: 4px; margin-top: 15px; color: #fff;
+            text-transform: uppercase;
         }
-
-        /* مؤشر السحب للأعلى (Swipe Up) */
-        .swipe-indicator {
-            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
-            z-index: 3; text-align: center; color: rgba(255,255,255,0.6);
-            animation: bounce 2s infinite;
-        }
-        .swipe-icon {
-            display: block; width: 20px; height: 20px;
-            border-top: 2px solid var(--gold); border-right: 2px solid var(--gold);
-            transform: rotate(-45deg); margin: 0 auto 10px;
-        }
-
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); } 40% { transform: translateX(-50%) translateY(-15px); } 60% { transform: translateX(-50%) translateY(-7px); } }
-
-        /* شريط سفلي (App-like Bottom Bar) */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: rgba(7, 7, 10, 0.9); backdrop-filter: blur(10px);
-            display: flex; justify-content: space-around; padding: 15px 0;
-            z-index: 100; border-top: 1px solid rgba(212, 175, 55, 0.2);
-            padding-bottom: env(safe-area-inset-bottom); /* لدعم شاشات الآيفون الجديدة */
-        }
-        .nav-item { color: #888; text-decoration: none; font-size: 12px; display: flex; flex-direction: column; align-items: center; }
-        .nav-item.active { color: var(--gold); }
-        .nav-icon { font-size: 20px; margin-bottom: 5px; }
-        
-        /* تعديل المسافة السفلية لكي لا يغطي الشريط الأزرار */
-        .content { padding-bottom: 90px; }
     </style>
 </head>
 <body>
 
-    <!-- الشاشة الأولى: الترحيب -->
-    <section class="screen active" id="home">
-        <img src="https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?auto=format&fit=crop&w=800&q=80" alt="خلفية المتجر" class="bg-image">
-        <div class="overlay" style="background: rgba(0,0,0,0.4);"></div>
-        <div class="hero-content">
+    <!-- مؤشرات التصفح الجانبية -->
+    <div class="pagination">
+        <div class="dot active" data-index="0"></div>
+        <div class="dot" data-index="1"></div>
+        <div class="dot" data-index="2"></div>
+        <div class="dot" data-index="3"></div>
+        <div class="dot" data-index="4"></div>
+    </div>
+
+    <!-- زر المساعد الشخصي الثابت (الواتساب) -->
+    <!-- يمكنك تغيير الأيقونة لنص أو صورة، هنا استخدمنا رمز محادثة بسيط -->
+    <a href="https://wa.me/972526177768?text=أهلاً،%20أحتاج%20إلى%20مساعدة%20في%20اختيار%20هدية." class="vip-concierge" target="_blank" id="concierge">
+        <span style="color: var(--dark-bg);">✦</span>
+    </a>
+
+    <!-- 1. الرئيسية (ذهبي) -->
+    <section class="screen active" data-color="#D4AF37">
+        <img src="https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?auto=format&fit=crop&w=800&q=80" alt="خلفية" class="bg-image">
+        <div class="overlay" style="background: rgba(5,5,8,0.5);"></div>
+        <div class="hero-center">
             <div class="hero-title">ZEINA</div>
-            <div class="hero-sub">عالم من الفخامة بين يديك</div>
-        </div>
-        <div class="swipe-indicator">
-            <span class="swipe-icon"></span>
-            <span style="font-size: 12px; letter-spacing: 2px;">اسحب للأعلى للاستكشاف</span>
+            <div class="hero-sub">فنّ الإهداء المتناهي</div>
         </div>
     </section>
 
-    <!-- الشاشة الثانية: الأقلام -->
-    <section class="screen">
-        <img src="https://images.unsplash.com/photo-1585336261022-680e295ce3fe?auto=format&fit=crop&w=800&q=80" alt="أقلام فاخرة" class="bg-image">
+    <!-- 2. العطور (ذهبي وردي) -->
+    <section class="screen" data-color="#E0A96D">
+        <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=80" alt="عطور" class="bg-image">
         <div class="overlay"></div>
         <div class="content">
-            <span class="category">Signature Pens</span>
-            <h2 class="title">أقلام النخبة</h2>
-            <p class="desc">أداة كتابة تتجاوز وظيفتها لتصبح رمزاً للنفوذ. صُنعت لتوقيع يترك أثراً لا يُمحى.</p>
-            <a href="https://wa.me/972526177768?text=أهلاً،%20أريد%20الاستفسار%20عن%20الأقلام%20الفاخرة." class="buy-btn" target="_blank">استفسر عن القطعة</a>
+            <span class="category">Niche Fragrances</span>
+            <h2 class="title">عطور النخبة</h2>
+            <p class="desc">خلاصات نادرة تُقطّر بعناية لتأسر الحواس. عطرٌ يعكس حضورك ويترك أثراً لا يُنسى قبل أن تنطق بكلمة.</p>
+            <a href="https://wa.me/972526177768?text=استفسار%20عن%20العطور" class="buy-btn" target="_blank">اكتشف المجموعة</a>
         </div>
     </section>
 
-    <!-- الشاشة الثالثة: الحقائب -->
-    <section class="screen">
-        <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=800&q=80" alt="حقائب فاخرة" class="bg-image">
+    <!-- 3. الساعات (بلاتيني) -->
+    <section class="screen" data-color="#E5E4E2">
+        <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=800&q=80" alt="ساعات" class="bg-image">
         <div class="overlay"></div>
         <div class="content">
-            <span class="category">Designer Bags</span>
-            <h2 class="title">حقائب استثنائية</h2>
-            <p class="desc">جلود طبيعية نادرة تُقص وتُخاط بأيدٍ خبيرة لتشكل تحفة فنية ترافق إطلالتك.</p>
-            <a href="https://wa.me/972526177768?text=أهلاً،%20أريد%20الاستفسار%20عن%20الحقائب." class="buy-btn" target="_blank">استفسر عن القطعة</a>
+            <span class="category">Haute Horlogerie</span>
+            <h2 class="title">الزمن المُلهم</h2>
+            <p class="desc">تعقيدات ميكانيكية تُصاغ كالتحف. ساعة لا تخبرك بالوقت فقط، بل تروي قصة هيبتك ووقارك.</p>
+            <a href="https://wa.me/972526177768?text=استفسار%20عن%20الساعات" class="buy-btn" target="_blank">اكتشف المجموعة</a>
         </div>
     </section>
 
-    <!-- الشاشة الرابعة: الهدايا -->
-    <section class="screen">
-        <img src="https://i0.wp.com/assaliyacenter.com/wp-content/uploads/2025/07/5244562231771918030-1.jpg?resize=600%2C600&ssl=1?v=1753946613" alt="صناديق هدايا" class="bg-image">
+    <!-- 4. الحقائب والجلديات (عنابي/جلدي) -->
+    <section class="screen" data-color="#B85D19">
+        <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=800&q=80" alt="حقائب" class="bg-image">
         <div class="overlay"></div>
         <div class="content">
-            <span class="category">Exclusive Gifts</span>
+            <span class="category">Fine Leather</span>
+            <h2 class="title">أصالة الجلود</h2>
+            <p class="desc">جلود استثنائية صُنعت بحرفية يدوية صارمة لتكون الرفيق الأنيق الذي يليق بإطلالتك الجريئة.</p>
+            <a href="https://wa.me/972526177768?text=استفسار%20عن%20الحقائب" class="buy-btn" target="_blank">اكتشف المجموعة</a>
+        </div>
+    </section>
+
+    <!-- 5. هدايا الـ VIP (زمردي ملكي) -->
+    <section class="screen" data-color="#50C878">
+        <img src="https://images.unsplash.com/photo-1549465220-1a8b94384480?auto=format&fit=crop&w=800&q=80" alt="هدايا" class="bg-image">
+        <div class="overlay"></div>
+        <div class="content">
+            <span class="category">VIP Experiences</span>
             <h2 class="title">هدايا لا تُنسى</h2>
-            <p class="desc">صناديق مغلفة بالمخمل الفاخر، تضم بداخلها قطَعاً حصرية تُنسق خصيصاً لتليق بمن تحب.</p>
-            <a href="https://wa.me/972526177768?text=أهلاً،%20أريد%20الاستفسار%20عن%20صناديق%20الهدايا." class="buy-btn" target="_blank">استفسر عن القطعة</a>
+            <p class="desc">صناديق فاخرة تُصمم خصيصاً لتخليد أعظم اللحظات. لأن الهدية من زينة هي رسالة صامتة تتجاوز الكلمات.</p>
+            <a href="https://wa.me/972526177768?text=استفسار%20عن%20صناديق%20الـVIP" class="buy-btn" target="_blank">صمم هديتك الخاصة</a>
         </div>
     </section>
 
-    <!-- شريط التصفح السفلي (مثل التطبيقات) -->
-    <nav class="bottom-nav">
-        <a href="#home" class="nav-item active">
-            <span class="nav-icon">⌂</span>
-            الرئيسية
-        </a>
-        <a href="https://wa.me/972526177768" class="nav-item" target="_blank">
-            <span class="nav-icon">💬</span>
-            تواصل معنا
-        </a>
-        <a href="#" class="nav-item">
-            <span class="nav-icon">☰</span>
-            القائمة
-        </a>
-    </nav>
-
-    <!-- جافاسكربت لتفعيل الحركات عند السحب -->
+    <!-- الجافاسكربت لإدارة الألوان والحركات -->
     <script>
-        // إعداد المراقب لمراقبة الشاشة الحالية
+        const screens = document.querySelectorAll('.screen');
+        const dots = document.querySelectorAll('.dot');
+        const root = document.documentElement;
+
+        // إعداد المراقب لمراقبة الشاشة النشطة
         const observerOptions = {
             root: null,
             rootMargin: '0px',
-            threshold: 0.6 // يتفعل التأثير عندما تظهر 60% من الشاشة
+            threshold: 0.6 // تتفعل عندما يظهر 60% من القسم
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
+                    // 1. تفعيل حركات الشاشة
+                    screens.forEach(s => s.classList.remove('active'));
                     entry.target.classList.add('active');
-                } else {
-                    entry.target.classList.remove('active');
+
+                    // 2. تحديث اللون الأساسي للموقع بالكامل
+                    const newColor = entry.target.getAttribute('data-color');
+                    root.style.setProperty('--theme-color', newColor);
+
+                    // 3. تحديث النقاط الجانبية
+                    const index = Array.from(screens).indexOf(entry.target);
+                    dots.forEach(dot => dot.classList.remove('active'));
+                    dots[index].classList.add('active');
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.screen').forEach(screen => {
-            observer.observe(screen);
-        });
+        screens.forEach(screen => observer.observe(screen));
     </script>
 </body>
 </html>
