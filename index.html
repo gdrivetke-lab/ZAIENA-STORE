@@ -2,16 +2,16 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>متجر زينة | عالم من الفخامة اللامتناهية</title>
+    <title>متجر زينة | تحفة تفاعلية</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;700&family=Playfair+Display:wght@400;700&display=swap');
         
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; cursor: none; /* إخفاء الماوس الافتراضي */ }
+        
         body { 
             margin: 0; 
-            /* خلفية ليلية ساحرة */
-            background: radial-gradient(circle at 50% 0%, #1a1a24 0%, #05050a 100%);
-            color: #e0dcd3; 
+            background: radial-gradient(circle at 50% 0%, #fdfbf7 0%, #f0e2b6 60%, #e3ce93 100%);
+            color: #3d2b1f; 
             font-family: 'Amiri', serif; 
             line-height: 1.8;
             overflow-x: hidden;
@@ -19,274 +19,261 @@
             min-height: 100vh;
         }
 
-        /* --- تأثير غبار النجوم (Stardust) --- */
-        .stardust-container {
+        /* --- شاشة التحميل السينمائية --- */
+        #loader {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .star {
-            position: absolute;
-            background: #d4af37;
-            border-radius: 50%;
-            box-shadow: 0 0 10px 2px rgba(212, 175, 55, 0.4);
-            animation: floatStar 15s infinite linear;
-            opacity: 0;
-        }
-
-        .star:nth-child(1) { width: 3px; height: 3px; left: 15%; animation-duration: 20s; animation-delay: 0s; }
-        .star:nth-child(2) { width: 5px; height: 5px; left: 45%; animation-duration: 25s; animation-delay: 3s; }
-        .star:nth-child(3) { width: 2px; height: 2px; left: 75%; animation-duration: 18s; animation-delay: 7s; }
-        .star:nth-child(4) { width: 4px; height: 4px; left: 85%; animation-duration: 22s; animation-delay: 2s; }
-        .star:nth-child(5) { width: 6px; height: 6px; left: 25%; animation-duration: 30s; animation-delay: 5s; }
-
-        @keyframes floatStar {
-            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-            20% { opacity: 0.8; }
-            80% { opacity: 0.8; }
-            100% { transform: translateY(-20vh) scale(1.5); opacity: 0; }
-        }
-
-        /* الهيدر الأثيري */
-        .header {
-            text-align: center;
-            padding: 80px 20px;
-            background: transparent;
-            position: relative;
-            z-index: 10;
-        }
-
-        h1 { 
-            font-family: 'Cinzel', serif; /* خط روماني فائق الفخامة */
-            font-size: 5rem; 
-            color: #d4af37; 
-            margin: 0;
-            letter-spacing: 10px;
-            text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
-        }
-
-        .subtitle { 
-            font-family: 'Playfair Display', serif;
-            font-style: italic; 
-            color: #a89f91; 
-            letter-spacing: 5px;
-            margin-top: 15px;
-            font-size: 1.3rem;
-            text-transform: uppercase;
-        }
-
-        .main-wrapper { 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            padding: 40px 20px 100px 20px;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* شبكة المنتجات بتأثير الزجاج (Glassmorphism) */
-        .luxury-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
-            margin-top: 50px;
-        }
-
-        .luxury-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 25px;
-            border: 1px solid rgba(212, 175, 55, 0.1);
-            border-radius: 2px;
-            text-align: center;
-            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .luxury-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 50%; height: 100%;
-            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
-            transform: skewX(-25deg);
-            transition: 0.8s;
-        }
-
-        .luxury-card:hover::before {
-            left: 150%;
-        }
-
-        .luxury-card:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.2);
-            border-color: rgba(212, 175, 55, 0.5);
-        }
-
-        .category-tag {
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            color: #d4af37;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        /* حاوية الصور عالية الدقة */
-        .image-container {
-            width: 100%;
-            height: 400px;
-            overflow: hidden;
-            margin-bottom: 25px;
-            border-radius: 2px;
-            position: relative;
-        }
-
-        .image-container::after {
-            content: '';
-            position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+            background: #05050a;
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1.5s ease-out;
+        }
+        .loader-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            color: #d4af37;
+            letter-spacing: 15px;
+            animation: pulse 2s infinite alternate;
+        }
+        @keyframes pulse {
+            0% { text-shadow: 0 0 10px rgba(212, 175, 55, 0.2); transform: scale(1); }
+            100% { text-shadow: 0 0 40px rgba(212, 175, 55, 0.8); transform: scale(1.05); }
+        }
+
+        /* --- مؤشر الماوس المخصص --- */
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background: #a67c00;
+            border-radius: 50%;
+            position: fixed;
             pointer-events: none;
+            z-index: 100000;
+            transform: translate(-50%, -50%);
+        }
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 1px solid rgba(166, 124, 0, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 100000;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background 0.2s;
         }
 
-        .product-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 1.2s ease;
-            filter: brightness(0.85) contrast(1.1);
+        /* ذرات الضوء في الخلفية */
+        .light-motes-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+        }
+        .mote {
+            position: absolute; background: rgba(255, 255, 255, 0.8); border-radius: 50%;
+            box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.6); animation: floatUp 15s infinite ease-in-out; opacity: 0;
+        }
+        .mote:nth-child(1) { width: 8px; height: 8px; left: 10%; animation-duration: 18s; }
+        .mote:nth-child(2) { width: 12px; height: 12px; left: 35%; animation-duration: 22s; animation-delay: 3s; }
+        .mote:nth-child(3) { width: 6px; height: 6px; left: 65%; animation-duration: 15s; animation-delay: 7s; }
+        .mote:nth-child(4) { width: 15px; height: 15px; left: 50%; animation-duration: 20s; animation-delay: 5s; }
+        @keyframes floatUp { 0% { transform: translateY(100vh) scale(0.5); opacity: 0; } 50% { opacity: 0.7; } 100% { transform: translateY(-20vh) scale(1.5); opacity: 0; } }
+
+        /* الهيدر */
+        .header { text-align: center; padding: 100px 20px 50px; position: relative; z-index: 10; }
+        h1 { font-family: 'Cinzel', serif; font-size: 5rem; color: #a67c00; margin: 0; letter-spacing: 10px; }
+        .subtitle { font-family: 'Playfair Display', serif; font-style: italic; color: #7a5e33; letter-spacing: 5px; margin-top: 15px; font-size: 1.3rem; }
+
+        .main-wrapper { max-width: 1200px; margin: 0 auto; padding: 20px 20px 100px; position: relative; z-index: 10; }
+
+        /* شبكة المنتجات */
+        .luxury-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 50px; margin-top: 50px;
         }
 
-        .luxury-card:hover .product-image {
-            transform: scale(1.15);
-            filter: brightness(1) contrast(1.2);
-        }
-
-        .luxury-card h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: #fff;
-            margin: 15px 0 10px 0;
-            font-weight: 400;
-        }
-
-        .product-description {
-            color: #a89f91;
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            height: 55px;
-        }
-
-        /* زر الاستفسار الفاخر */
-        .inquire-btn { 
-            display: inline-block;
-            padding: 15px 40px; 
-            border: 1px solid rgba(212, 175, 55, 0.5); 
-            color: #d4af37; 
-            text-decoration: none; 
-            transition: 0.4s;
-            font-family: 'Amiri', serif;
-            font-size: 1.2rem;
-            background: transparent;
+        /* البطاقات مع تجهيزها للتأثير ثلاثي الأبعاد */
+        .luxury-card {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 4px;
+            text-align: center;
             position: relative;
-            overflow: hidden;
-        }
-
-        .inquire-btn:hover { 
-            background: #d4af37; 
-            color: #05050a; 
-            letter-spacing: 2px;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
-        }
-
-        footer { 
-            text-align: center; 
-            padding: 60px 20px;
-            background: #020204;
-            color: #666;
-            position: relative;
-            z-index: 10;
-            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 15px 35px rgba(166, 124, 0, 0.08);
+            transform-style: preserve-3d; /* مهم جداً للـ 3D */
+            will-change: transform;
+            opacity: 0; /* مخفية في البداية لتأثير الظهور */
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
         
-        footer .footer-logo {
-            font-family: 'Cinzel', serif;
-            font-size: 2rem;
-            color: rgba(212, 175, 55, 0.5);
-            letter-spacing: 5px;
-            margin-bottom: 15px;
+        .luxury-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
+
+        .category-tag { font-family: 'Cinzel', serif; font-size: 0.85rem; color: #a67c00; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; font-weight: 700; transform: translateZ(30px); }
+        .image-container { width: 100%; height: 350px; overflow: hidden; margin-bottom: 25px; border-radius: 2px; transform: translateZ(50px); }
+        .product-image { width: 100%; height: 100%; object-fit: cover; }
+        .luxury-card h3 { font-family: 'Playfair Display', serif; font-size: 2rem; color: #2c1e0b; margin: 15px 0 10px; font-weight: 700; transform: translateZ(40px); }
+        .product-description { color: #5c4a3d; font-size: 1.1rem; margin-bottom: 30px; height: 55px; transform: translateZ(20px); }
+        
+        .inquire-btn { 
+            display: inline-block; padding: 15px 40px; border: 1px solid #a67c00; color: #a67c00; 
+            text-decoration: none; font-family: 'Amiri', serif; font-size: 1.2rem; font-weight: bold;
+            transform: translateZ(60px); transition: all 0.3s;
+        }
+        .inquire-btn:hover { background: #a67c00; color: #fff; letter-spacing: 2px; box-shadow: 0 0 15px rgba(166, 124, 0, 0.4); }
+
+        footer { text-align: center; padding: 60px 20px; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); color: #5c4a3d; border-top: 1px solid rgba(166, 124, 0, 0.3); }
+        footer .footer-logo { font-family: 'Cinzel', serif; font-size: 2rem; color: #a67c00; letter-spacing: 5px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
-    <!-- تأثير غبار النجوم الساحر -->
-    <div class="stardust-container">
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
+    <!-- شاشة التحميل -->
+    <div id="loader">
+        <div class="loader-logo">ZEINA</div>
+    </div>
+
+    <!-- مؤشر الماوس السحري -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <div class="light-motes-container">
+        <div class="mote"></div><div class="mote"></div><div class="mote"></div><div class="mote"></div>
     </div>
 
     <header class="header">
         <h1>ZEINA</h1>
-        <div class="subtitle">حيث يتوقف الزمن لتبدأ الأناقة</div>
+        <div class="subtitle">إشراقة الأناقة الخالدة</div>
     </header>
 
     <div class="main-wrapper">
-        
         <div class="luxury-grid">
             
-            <!-- الساعات الفاخرة -->
+            <!-- الساعات -->
             <div class="luxury-card">
                 <div class="category-tag">Horology Collection</div>
                 <div class="image-container">
-                    <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=800&q=80" alt="ساعات فاخرة" class="product-image">
+                    <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=800&q=80" alt="ساعات" class="product-image">
                 </div>
                 <h3>ساعات النخبة</h3>
-                <p class="product-description">هندسة دقيقة وتصميم يتحدى الزمن، لمعصم يعكس الهيبة والوقار.</p>
-                <a href="https://wa.me/972526177768?text=أهلاً،%20أود%20الاستفسار%20عن%20مجموعة%20الساعات%20الفاخرة%20والأسعار%20بالشيقل." class="inquire-btn" target="_blank">اكتشف القطعة</a>
+                <p class="product-description">هندسة دقيقة وتصميم يتحدى الزمن.</p>
+                <a href="https://wa.me/972526177768?text=أهلاً،%20أود%20الاستفسار%20عن%20الساعات" class="inquire-btn" target="_blank">اكتشف القطعة</a>
             </div>
 
-            <!-- الحقائب الأنيقة -->
+            <!-- الحقائب -->
             <div class="luxury-card">
                 <div class="category-tag">Designer Bags</div>
                 <div class="image-container">
-                    <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=800&q=80" alt="حقائب أنيقة" class="product-image">
+                    <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=800&q=80" alt="حقائب" class="product-image">
                 </div>
                 <h3>حقائب استثنائية</h3>
-                <p class="product-description">جلود طبيعية نادرة وحرفية يدوية تصنع لكِ رفيقاً يليق بإطلالتك.</p>
-                <a href="https://wa.me/972526177768?text=أهلاً،%20أود%20الاستفسار%20عن%20مجموعة%20الحقائب%20والأسعار%20بالشيقل." class="inquire-btn" target="_blank">اكتشف القطعة</a>
+                <p class="product-description">جلود طبيعية نادرة وحرفية يدوية.</p>
+                <a href="https://wa.me/972526177768?text=أهلاً،%20أود%20الاستفسار%20عن%20الحقائب" class="inquire-btn" target="_blank">اكتشف القطعة</a>
             </div>
 
-            <!-- الإكسسوارات والمجوهرات -->
+            <!-- الإكسسوارات -->
             <div class="luxury-card">
                 <div class="category-tag">Exquisite Jewels</div>
                 <div class="image-container">
-                    <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80" alt="إكسسوارات ساحرة" class="product-image">
+                    <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80" alt="مجوهرات" class="product-image">
                 </div>
                 <h3>بريق الإكسسوارات</h3>
-                <p class="product-description">قطع مصاغة بشغف لتخطف الأنظار، تتلألأ بتفاصيل تسرد قصة جمالك.</p>
-                <a href="https://wa.me/972526177768?text=أهلاً،%20أود%20الاستفسار%20عن%20مجموعة%20الإكسسوارات%20والأسعار%20بالشيقل." class="inquire-btn" target="_blank">اكتشف القطعة</a>
+                <p class="product-description">قطع مصاغة بشغف لتخطف الأنظار.</p>
+                <a href="https://wa.me/972526177768?text=أهلاً،%20أود%20الاستفسار%20عن%20الإكسسوارات" class="inquire-btn" target="_blank">اكتشف القطعة</a>
             </div>
 
         </div>
-
     </div>
 
     <footer>
         <div class="footer-logo">ZEINA EXCLUSIVE</div>
-        &copy; 2026 زينة - عالم بلا حدود من الرقي.
+        &copy; 2026 زينة - الإشراقة التي لا تنطفئ.
     </footer>
 
+    <!-- سحر الجافاسكربت -->
+    <script>
+        // 1. إخفاء شاشة التحميل
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 1500);
+            }, 2000); // الشعار ينبض لثانيتين قبل الفتح
+        });
+
+        // 2. مؤشر الماوس المخصص
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorOutline = document.getElementById('cursor-outline');
+        
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            
+            // إضافة تأخير بسيط للهالة لتعطي تأثير السلاسة
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        // تكبير الماوس عند الوقوف على الأزرار
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                cursorOutline.style.width = '60px';
+                cursorOutline.style.height = '60px';
+                cursorOutline.style.background = 'rgba(166, 124, 0, 0.1)';
+            });
+            link.addEventListener('mouseleave', () => {
+                cursorOutline.style.width = '40px';
+                cursorOutline.style.height = '40px';
+                cursorOutline.style.background = 'transparent';
+            });
+        });
+
+        // 3. التأثير ثلاثي الأبعاد للبطاقات (3D Tilt)
+        const cards = document.querySelectorAll('.luxury-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -15; // زاوية الميل
+                const rotateY = ((x - centerX) / centerX) * 15;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+                card.style.transition = 'transform 0.5s ease'; // العودة بهدوء
+            });
+            
+            card.addEventListener('mouseenter', () => {
+                card.style.transition = 'none'; // إزالة التأخير عند التحريك
+            });
+        });
+
+        // 4. ظهور المنتجات تدريجياً عند النزول (Scroll Reveal)
+        const observerOptions = { threshold: 0.2 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        cards.forEach(card => observer.observe(card));
+    </script>
 </body>
 </html>
