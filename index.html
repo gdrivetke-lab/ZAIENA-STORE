@@ -2,218 +2,245 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر زينة | العرض السينمائي</title>
-    <!-- خطوط فاخرة -->
+    <!-- إعدادات أساسية لضمان عمل الموقع كتطبيق جوال -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#07070a">
+    <title>متجر زينة | الجوال</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --gold: #D4AF37;
             --dark: #07070a;
-            --text: #f0e6d2;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             background-color: var(--dark);
-            color: var(--text);
             font-family: 'Amiri', serif;
-            overflow-x: hidden;
+            color: #fff;
+            /* السر في هذا الكود: جعل الصفحة تنزلق كالتطبيقات */
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            scroll-behavior: smooth;
         }
 
-        /* تأثير التشويش السينمائي (Film Grain) */
-        .noise {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none; z-index: 9999; opacity: 0.04;
-            background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Dissolve_Noise_Texture.png');
-            animation: noise 0.2s infinite;
-        }
-        @keyframes noise { 0% { transform: translate(0,0); } 10% { transform: translate(-5%,-5%); } 20% { transform: translate(-10%,5%); } 30% { transform: translate(5%,-10%); } 40% { transform: translate(-5%,15%); } 50% { transform: translate(-10%,5%); } 60% { transform: translate(15%,0); } 70% { transform: translate(0,15%); } 80% { transform: translate(3%,35%); } 90% { transform: translate(-10%,10%); } }
+        /* إخفاء شريط التمرير الافتراضي لشكل أنظف */
+        body::-webkit-scrollbar { display: none; }
 
-        /* الماوس السحري */
-        .custom-cursor {
-            position: fixed; top: 0; left: 0; width: 15px; height: 15px;
-            background-color: var(--gold); border-radius: 50%;
-            pointer-events: none; z-index: 10000;
-            transform: translate(-50%, -50%);
-            mix-blend-mode: difference;
-            transition: transform 0.1s;
+        /* كل شاشة تأخذ حجم الجوال بالكامل */
+        .screen {
+            height: 100vh;
+            width: 100vw;
+            scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
         }
 
-        /* الهيدر */
-        .hero {
-            height: 100vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-        }
-        .hero h1 {
-            font-family: 'Playfair Display', serif; font-size: 8vw;
-            letter-spacing: 15px; color: var(--gold);
-        }
-        .hero p { font-size: 1.5vw; letter-spacing: 5px; margin-top: 10px; opacity: 0.7; }
-
-        /* حاوية البطاقات المتراكمة */
-        .cards-container {
-            padding: 5vh 5vw;
-            display: flex; flex-direction: column; gap: 5vh;
-            padding-bottom: 20vh;
+        /* صورة المنتج الخلفية وملء الشاشة */
+        .bg-image {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; z-index: 1;
+            filter: brightness(0.65);
+            transform: scale(1.1); /* تكبير مبدئي للتأثير الحركي */
+            transition: transform 1.5s ease-out, filter 1.5s ease-out;
         }
 
-        /* تصميم البطاقة الفاخرة */
-        .card {
-            position: sticky; top: 10vh; /* السر هنا: تثبيت البطاقة عند الوصول لأعلى الشاشة */
-            height: 80vh; width: 100%;
-            background: #111116; border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 20px; overflow: hidden;
-            display: flex; align-items: center;
-            transform-origin: top center; /* لضمان الانكماش من الأعلى */
-            box-shadow: 0 -20px 30px rgba(0,0,0,0.8);
+        /* تفعيل التأثير عند ظهور الشاشة */
+        .screen.active .bg-image {
+            transform: scale(1);
+            filter: brightness(0.85);
         }
 
-        .card-img {
-            width: 50%; height: 100%; object-fit: cover;
-            filter: brightness(0.7) contrast(1.1);
-            transition: filter 0.5s, transform 1s;
-        }
-        .card:hover .card-img { filter: brightness(1) contrast(1.2); transform: scale(1.05); }
-
-        .card-content {
-            width: 50%; padding: 5vw;
-            display: flex; flex-direction: column; justify-content: center;
+        /* تدرج لوني أسفل الشاشة لجعل النص مقروءاً */
+        .overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
+            background: linear-gradient(to top, rgba(7,7,10,0.95) 0%, rgba(7,7,10,0) 100%);
+            z-index: 2;
         }
 
-        .card-tag {
-            font-family: 'Playfair Display', serif; font-size: 1vw;
-            color: var(--gold); letter-spacing: 4px; text-transform: uppercase;
-            margin-bottom: 15px;
+        /* محتوى المنتج (يظهر من الأسفل) */
+        .content {
+            position: relative; z-index: 3;
+            padding: 30px 20px 40px;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: transform 0.8s ease-out 0.3s, opacity 0.8s ease-out 0.3s;
         }
 
-        .card-title {
-            font-family: 'Playfair Display', serif; font-size: 4vw;
-            color: #fff; margin-bottom: 30px; line-height: 1.2;
+        .screen.active .content {
+            transform: translateY(0);
+            opacity: 1;
         }
 
-        .card-desc { font-size: 1.2vw; line-height: 1.8; color: #888; margin-bottom: 50px; }
+        .category {
+            font-family: 'Playfair Display', serif; font-size: 14px;
+            color: var(--gold); letter-spacing: 3px; text-transform: uppercase;
+            margin-bottom: 10px; display: block;
+        }
 
-        /* زر الشراء المغناطيسي */
+        .title {
+            font-family: 'Playfair Display', serif; font-size: 38px;
+            margin-bottom: 15px; font-weight: 700; line-height: 1.1;
+        }
+
+        .desc {
+            font-size: 16px; color: #d0d0d0; line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* زر الشراء المخصص لللمس */
         .buy-btn {
-            align-self: flex-start; padding: 15px 40px;
-            background: transparent; color: var(--gold);
-            border: 1px solid var(--gold); border-radius: 30px;
-            font-size: 1.2vw; text-decoration: none;
-            transition: all 0.4s; position: relative; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; padding: 18px;
+            background-color: var(--gold); color: var(--dark);
+            border-radius: 12px; font-size: 18px; font-weight: bold;
+            text-decoration: none; transition: transform 0.2s;
         }
-        .buy-btn::before {
-            content: ''; position: absolute; top: 0; left: -100%;
-            width: 100%; height: 100%; background: var(--gold);
-            transition: all 0.4s; z-index: -1;
+        .buy-btn:active { transform: scale(0.96); }
+
+        /* الشاشة الأولى (الافتتاحية) */
+        .hero-content {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3; text-align: center; width: 100%;
         }
-        .buy-btn:hover { color: var(--dark); border-color: transparent; }
-        .buy-btn:hover::before { left: 0; }
+        .hero-title {
+            font-family: 'Playfair Display', serif; font-size: 50px;
+            color: var(--gold); letter-spacing: 10px;
+            animation: fadeInDown 1.5s ease-out;
+        }
+        .hero-sub {
+            font-size: 18px; letter-spacing: 3px; margin-top: 15px;
+            color: #fff; animation: fadeInUp 1.5s ease-out 0.5s both;
+        }
 
-        /* للبطاقات الفردية لتغيير الترتيب */
-        .card:nth-child(even) { flex-direction: row-reverse; }
+        /* مؤشر السحب للأعلى (Swipe Up) */
+        .swipe-indicator {
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+            z-index: 3; text-align: center; color: rgba(255,255,255,0.6);
+            animation: bounce 2s infinite;
+        }
+        .swipe-icon {
+            display: block; width: 20px; height: 20px;
+            border-top: 2px solid var(--gold); border-right: 2px solid var(--gold);
+            transform: rotate(-45deg); margin: 0 auto 10px;
+        }
 
-        footer { text-align: center; padding: 5vh; color: #555; border-top: 1px solid #222; }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); } 40% { transform: translateX(-50%) translateY(-15px); } 60% { transform: translateX(-50%) translateY(-7px); } }
+
+        /* شريط سفلي (App-like Bottom Bar) */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(7, 7, 10, 0.9); backdrop-filter: blur(10px);
+            display: flex; justify-content: space-around; padding: 15px 0;
+            z-index: 100; border-top: 1px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: env(safe-area-inset-bottom); /* لدعم شاشات الآيفون الجديدة */
+        }
+        .nav-item { color: #888; text-decoration: none; font-size: 12px; display: flex; flex-direction: column; align-items: center; }
+        .nav-item.active { color: var(--gold); }
+        .nav-icon { font-size: 20px; margin-bottom: 5px; }
+        
+        /* تعديل المسافة السفلية لكي لا يغطي الشريط الأزرار */
+        .content { padding-bottom: 90px; }
     </style>
 </head>
 <body>
 
-    <div class="noise"></div>
-    <div class="custom-cursor"></div>
-
-    <section class="hero">
-        <h1>ZEINA</h1>
-        <p>فنّ الإهداء المتناهي</p>
+    <!-- الشاشة الأولى: الترحيب -->
+    <section class="screen active" id="home">
+        <img src="https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?auto=format&fit=crop&w=800&q=80" alt="خلفية المتجر" class="bg-image">
+        <div class="overlay" style="background: rgba(0,0,0,0.4);"></div>
+        <div class="hero-content">
+            <div class="hero-title">ZEINA</div>
+            <div class="hero-sub">عالم من الفخامة بين يديك</div>
+        </div>
+        <div class="swipe-indicator">
+            <span class="swipe-icon"></span>
+            <span style="font-size: 12px; letter-spacing: 2px;">اسحب للأعلى للاستكشاف</span>
+        </div>
     </section>
 
-    <section class="cards-container">
-        
-        <!-- البطاقة الأولى: الأقلام -->
-        <div class="card" id="card1">
-            <img src="https://images.unsplash.com/photo-1585336261022-680e295ce3fe?auto=format&fit=crop&w=1200&q=80" alt="قلم فاخر" class="card-img">
-            <div class="card-content">
-                <div class="card-tag">Signature Pens</div>
-                <h2 class="card-title">أقلام النخبة</h2>
-                <p class="card-desc">أداة كتابة تتجاوز وظيفتها لتصبح رمزاً للنفوذ. صُنعت من المعادن النفيسة وزُينت بتفاصيل تُجسد دقة الحرفية العالية لتوقيع يترك أثراً لا يُمحى.</p>
-                <a href="https://wa.me/972526177768?text=استفسار%20عن%20الأقلام%20الفاخرة" class="buy-btn" target="_blank">امتلك القطعة</a>
-            </div>
+    <!-- الشاشة الثانية: الأقلام -->
+    <section class="screen">
+        <img src="https://images.unsplash.com/photo-1585336261022-680e295ce3fe?auto=format&fit=crop&w=800&q=80" alt="أقلام فاخرة" class="bg-image">
+        <div class="overlay"></div>
+        <div class="content">
+            <span class="category">Signature Pens</span>
+            <h2 class="title">أقلام النخبة</h2>
+            <p class="desc">أداة كتابة تتجاوز وظيفتها لتصبح رمزاً للنفوذ. صُنعت لتوقيع يترك أثراً لا يُمحى.</p>
+            <a href="https://wa.me/972526177768?text=أهلاً،%20أريد%20الاستفسار%20عن%20الأقلام%20الفاخرة." class="buy-btn" target="_blank">استفسر عن القطعة</a>
         </div>
-
-        <!-- البطاقة الثانية: الحقائب -->
-        <div class="card" id="card2">
-            <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=1200&q=80" alt="حقيبة فاخرة" class="card-img">
-            <div class="card-content">
-                <div class="card-tag">Designer Bags</div>
-                <h2 class="card-title">حقائب استثنائية</h2>
-                <p class="card-desc">جلود مختارة بعناية فائقة، تُقص وتُخاط بأيدٍ خبيرة لتشكل تحفة فنية ترافقك. تصميم يجمع بين الجرأة الكلاسيكية والعملية المطلقة.</p>
-                <a href="https://wa.me/972526177768?text=استفسار%20عن%20الحقائب" class="buy-btn" target="_blank">امتلك القطعة</a>
-            </div>
-        </div>
-
-        <!-- البطاقة الثالثة: صناديق الهدايا -->
-        <div class="card" id="card3">
-            <img src="https://images.unsplash.com/photo-1549465220-1a8b94384480?auto=format&fit=crop&w=1200&q=80" alt="صندوق هدايا" class="card-img">
-            <div class="card-content">
-                <div class="card-tag">Exclusive Gifts</div>
-                <h2 class="card-title">هدايا لا تُنسى</h2>
-                <p class="card-desc">صناديق مغلفة بالمخمل الفاخر، تضم بداخلها قطَعاً حصرية تُنسق خصيصاً لتليق بمن تحب. لأن الهدية من زينة هي رسالة بدون كلمات.</p>
-                <a href="https://wa.me/972526177768?text=استفسار%20عن%20الهدايا" class="buy-btn" target="_blank">امتلك القطعة</a>
-            </div>
-        </div>
-
     </section>
 
-    <footer>
-        &copy; 2026 ZEINA. صُمم ببراعة لا متناهية.
-    </footer>
+    <!-- الشاشة الثالثة: الحقائب -->
+    <section class="screen">
+        <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=800&q=80" alt="حقائب فاخرة" class="bg-image">
+        <div class="overlay"></div>
+        <div class="content">
+            <span class="category">Designer Bags</span>
+            <h2 class="title">حقائب استثنائية</h2>
+            <p class="desc">جلود طبيعية نادرة تُقص وتُخاط بأيدٍ خبيرة لتشكل تحفة فنية ترافق إطلالتك.</p>
+            <a href="https://wa.me/972526177768?text=أهلاً،%20أريد%20الاستفسار%20عن%20الحقائب." class="buy-btn" target="_blank">استفسر عن القطعة</a>
+        </div>
+    </section>
 
-    <!-- مكتبات التحريك العالمية -->
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- الشاشة الرابعة: الهدايا -->
+    <section class="screen">
+        <img src="https://images.unsplash.com/photo-1549465220-1a8b94384480?auto=format&fit=crop&w=800&q=80" alt="صناديق هدايا" class="bg-image">
+        <div class="overlay"></div>
+        <div class="content">
+            <span class="category">Exclusive Gifts</span>
+            <h2 class="title">هدايا لا تُنسى</h2>
+            <p class="desc">صناديق مغلفة بالمخمل الفاخر، تضم بداخلها قطَعاً حصرية تُنسق خصيصاً لتليق بمن تحب.</p>
+            <a href="https://wa.me/972526177768?text=أهلاً،%20أريد%20الاستفسار%20عن%20صناديق%20الهدايا." class="buy-btn" target="_blank">استفسر عن القطعة</a>
+        </div>
+    </section>
 
+    <!-- شريط التصفح السفلي (مثل التطبيقات) -->
+    <nav class="bottom-nav">
+        <a href="#home" class="nav-item active">
+            <span class="nav-icon">⌂</span>
+            الرئيسية
+        </a>
+        <a href="https://wa.me/972526177768" class="nav-item" target="_blank">
+            <span class="nav-icon">💬</span>
+            تواصل معنا
+        </a>
+        <a href="#" class="nav-item">
+            <span class="nav-icon">☰</span>
+            القائمة
+        </a>
+    </nav>
+
+    <!-- جافاسكربت لتفعيل الحركات عند السحب -->
     <script>
-        gsap.registerPlugin(ScrollTrigger);
+        // إعداد المراقب لمراقبة الشاشة الحالية
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.6 // يتفعل التأثير عندما تظهر 60% من الشاشة
+        };
 
-        // 1. التمرير السلس (Lenis)
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smooth: true
-        });
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                } else {
+                    entry.target.classList.remove('active');
+                }
+            });
+        }, observerOptions);
 
-        // 2. الماوس التفاعلي
-        const cursor = document.querySelector('.custom-cursor');
-        window.addEventListener('mousemove', (e) => {
-            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, ease: "power2.out" });
-        });
-
-        // 3. التأثير الخرافي: انكماش البطاقات وتراكمها (Stacking Cards Effect)
-        const cards = gsap.utils.toArray('.card');
-        
-        cards.forEach((card, index) => {
-            // لا نطبق التأثير على البطاقة الأخيرة لأنها لا تُغطى بشيء
-            if (index !== cards.length - 1) {
-                gsap.to(card, {
-                    scale: 0.9,          // يصغر حجم البطاقة
-                    opacity: 0.3,        // تخفت إضاءتها
-                    y: "-10vh",          // ترتفع قليلاً لتعطي عمقاً
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: cards[index + 1], // التأثير يبدأ عندما تلامس البطاقة التالية البطاقة الحالية
-                        start: "top bottom",
-                        end: "top 10vh",
-                        scrub: true,     // ربط الحركة بعجلة الماوس بشكل مباشر
-                    }
-                });
-            }
+        document.querySelectorAll('.screen').forEach(screen => {
+            observer.observe(screen);
         });
     </script>
 </body>
