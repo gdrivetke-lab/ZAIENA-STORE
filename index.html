@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>متجر زينة | الأيقونة الرقمية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <title>متجر زينة | الذهب السائل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --gold: #E5C158;
@@ -21,24 +21,28 @@
         }
 
         /* =========================================
-           شاشة الافتتاح (الذرات فائقة الدقة 4K)
+           شاشة الافتتاح (الذهب السائل)
            ========================================= */
         #intro-screen {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 100;
             background: radial-gradient(circle at center, #10141e 0%, #030407 100%);
-            transition: opacity 1.5s cubic-bezier(0.8, 0, 0.2, 1);
+            transition: opacity 2s cubic-bezier(0.8, 0, 0.2, 1);
         }
 
-        #particle-canvas {
-            display: block; position: absolute; top: 0; left: 0; z-index: 1;
-            filter: drop-shadow(0 0 12px rgba(229, 193, 88, 0.25));
+        /* حاوية الكانفاس لتطبيق فلتر صهر الذهب (Gooey Effect) */
+        .canvas-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
+            /* هذا الفلتر هو السحر الذي يصهر الذرات ويجعلها سائلة وصافية تماماً */
+            filter: url('#gooey') drop-shadow(0 0 15px rgba(229, 193, 88, 0.4));
         }
 
-        /* فلاش الانفجار الأبيض */
+        #particle-canvas { display: block; width: 100%; height: 100%; }
+
+        /* فلاش سينمائي ناعم */
         #flash {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #fff; z-index: 101; opacity: 0; pointer-events: none;
-            transition: opacity 0.5s ease-out;
+            transition: opacity 0.8s ease-out;
         }
 
         .ui-layer {
@@ -63,7 +67,7 @@
         .enter-btn:active { transform: scale(0.92); background: var(--gold); color: #000; }
 
         /* =========================================
-           المتجر الفعلي (تجربة الخيال)
+           المتجر الفعلي (الرحلة الفاخرة)
            ========================================= */
         #store-screen {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -79,7 +83,6 @@
             overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;
         }
 
-        /* النص العملاق المتحرك في الخلفية (Marquee) */
         .bg-text-marquee {
             position: absolute; top: 20%; left: -50%; width: 200%; z-index: 0;
             font-family: 'Playfair Display', serif; font-size: 15vw; font-weight: 900;
@@ -103,7 +106,6 @@
             z-index: 2;
         }
 
-        /* البطاقة الزجاجية للمحتوى (Glassmorphism) */
         .content {
             position: relative; z-index: 3; margin: 0 20px 40px; padding: 40px 30px;
             background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -130,7 +132,6 @@
         }
         .buy-btn:active { background: var(--theme-color); color: var(--dark-bg); transform: scale(0.96); }
 
-        /* شريط التمرير الجانبي */
         .pagination { position: fixed; right: 12px; top: 50%; transform: translateY(-50%); z-index: 100; display: flex; flex-direction: column; gap: 15px; }
         .dot { width: 3px; height: 15px; background: rgba(255,255,255,0.15); border-radius: 2px; transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
         .dot.active { height: 40px; background: var(--theme-color); box-shadow: 0 0 10px var(--theme-color); }
@@ -138,12 +139,24 @@
 </head>
 <body>
 
-    <!-- فلاش الانفجار الأبيض -->
+    <!-- فلتر صهر الذهب (السائل الخرافي) -->
+    <svg style="display: none;">
+        <defs>
+            <filter id="gooey">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -9" result="gooey" />
+                <feComposite in="SourceGraphic" in2="gooey" operator="atop"/>
+            </filter>
+        </defs>
+    </svg>
+
     <div id="flash"></div>
 
-    <!-- ================= شاشة الافتتاح (الذرات عالية الدقة 4K) ================= -->
+    <!-- شاشة الافتتاح (الذهب السائل) -->
     <div id="intro-screen">
-        <canvas id="particle-canvas"></canvas>
+        <div class="canvas-container">
+            <canvas id="particle-canvas"></canvas>
+        </div>
         <div class="ui-layer" id="ui-layer">
             <div class="header-intro">L'Art de Vivre</div>
             <div class="footer-action">
@@ -152,28 +165,25 @@
         </div>
     </div>
 
-    <!-- ================= المتجر الفعلي (6 مجموعات فاخرة) ================= -->
+    <!-- المتجر الفعلي -->
     <div id="store-screen">
         <div class="pagination">
             <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
             <div class="dot"></div><div class="dot"></div><div class="dot"></div>
         </div>
 
-        <!-- 1. الحقائب -->
         <section class="screen active" data-color="#D4AF37">
             <div class="bg-text-marquee">EXCLUSIVE HANDBAGS • LUXURY • </div>
-            <!-- صورة حقيبة عالية الدقة 4K -->
             <img src="https://images.unsplash.com/photo-1591561954557-26941169b49e?auto=format&fit=crop&w=2000&q=100" alt="حقائب" class="bg-image">
             <div class="overlay"></div>
             <div class="content">
                 <span class="category">Haute Couture Bags</span>
                 <h2 class="title">أيقونة الجلود</h2>
-                <p class="desc">تحف جلدية نادرة تُصاغ يدوياً بحرفية صارمة. حقيبة لا تحمل أمتعتك فقط، بل تحمل هويتك وتلفت الأنظار أينما خطوت.</p>
-                <a href="https://wa.me/972526177768?text=أريد%20الاستفسار%20عن%20الحقائب%20الفاخرة" class="buy-btn" target="_blank">تصفح التشكيلة</a>
+                <p class="desc">تحف جلدية نادرة تُصاغ يدوياً بحرفية صارمة. حقيبة لا تحمل أمتعتك فقط، بل تحمل هويتك.</p>
+                <a href="https://wa.me/972526177768?text=أريد%20الاستفسار%20عن%20الحقائب" class="buy-btn" target="_blank">تصفح التشكيلة</a>
             </div>
         </section>
 
-        <!-- 2. الأقلام الفاخرة -->
         <section class="screen" data-color="#B0C4DE">
             <div class="bg-text-marquee">SIGNATURE PENS • PRESTIGE • </div>
             <img src="https://images.unsplash.com/photo-1585336261022-680e295ce3fe?auto=format&fit=crop&w=2000&q=100" alt="أقلام" class="bg-image">
@@ -181,12 +191,11 @@
             <div class="content">
                 <span class="category">Masterpiece Writing</span>
                 <h2 class="title">سلطة الحبر</h2>
-                <p class="desc">أقلام صيغت من المعادن النفيسة لتكون امتداداً لأفكارك. توقيع واحد بهذا القلم يكفي ليعلن عن حضور قائد لا يُضاهى.</p>
-                <a href="https://wa.me/972526177768?text=أريد%20الاستفسار%20عن%20الأقلام%20الفاخرة" class="buy-btn" target="_blank">تصفح التشكيلة</a>
+                <p class="desc">أقلام صيغت من المعادن النفيسة لتكون امتداداً لأفكارك. توقيع واحد بهذا القلم يكفي ليعلن عن حضورك.</p>
+                <a href="https://wa.me/972526177768?text=أريد%20الاستفسار%20عن%20الأقلام" class="buy-btn" target="_blank">تصفح التشكيلة</a>
             </div>
         </section>
 
-        <!-- 3. الإكسسوارات والمجوهرات -->
         <section class="screen" data-color="#FFB6C1">
             <div class="bg-text-marquee">FINE JEWELRY • ELEGANCE • </div>
             <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=2000&q=100" alt="مجوهرات" class="bg-image">
@@ -194,12 +203,11 @@
             <div class="content">
                 <span class="category">Timeless Jewels</span>
                 <h2 class="title">بريق أبدي</h2>
-                <p class="desc">إكسسوارات صُممت لتسرق الضوء. قطع تتلألأ بتفاصيل دقيقة تعزف سيمفونية من الأناقة الخالصة على بشرتك.</p>
+                <p class="desc">إكسسوارات صُممت لتسرق الضوء. قطع تتلألأ بتفاصيل دقيقة تعزف سيمفونية من الأناقة الخالصة.</p>
                 <a href="https://wa.me/972526177768?text=أريد%20الاستفسار%20عن%20المجوهرات" class="buy-btn" target="_blank">تصفح التشكيلة</a>
             </div>
         </section>
 
-        <!-- 4. الساعات -->
         <section class="screen" data-color="#E5E4E2">
             <div class="bg-text-marquee">HAUTE HORLOGERIE • TIME • </div>
             <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=2000&q=100" alt="ساعات" class="bg-image">
@@ -207,12 +215,11 @@
             <div class="content">
                 <span class="category">Elite Timepieces</span>
                 <h2 class="title">هندسة الزمن</h2>
-                <p class="desc">آليات معقدة اجتمعت تحت زجاج الياقوت. هذه الساعات لا تحسب الدقائق، بل تُحصي لحظات انتصارك وتميزك.</p>
+                <p class="desc">آليات معقدة اجتمعت تحت زجاج الياقوت. هذه الساعات لا تحسب الدقائق، بل تُحصي لحظات تميزك.</p>
                 <a href="https://wa.me/972526177768?text=أريد%20الاستفسار%20عن%20الساعات" class="buy-btn" target="_blank">تصفح التشكيلة</a>
             </div>
         </section>
 
-        <!-- 5. العطور -->
         <section class="screen" data-color="#E0A96D">
             <div class="bg-text-marquee">NICHE PERFUMES • ESSENCE • </div>
             <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=2000&q=100" alt="عطور" class="bg-image">
@@ -220,15 +227,15 @@
             <div class="content">
                 <span class="category">Rare Fragrances</span>
                 <h2 class="title">أنفاس مترفة</h2>
-                <p class="desc">زجاجات عطرية تخبئ بداخلها مكونات نادرة جُمعت من أقاصي الأرض لتترك بصمة لا تُمحى في ذاكرة من يمر بك.</p>
+                <p class="desc">زجاجات عطرية تخبئ بداخلها مكونات نادرة جُمعت من أقاصي الأرض لتترك بصمة لا تُمحى.</p>
                 <a href="https://wa.me/972526177768?text=أريد%20الاستفسار%20عن%20العطور" class="buy-btn" target="_blank">تصفح التشكيلة</a>
             </div>
         </section>
 
-        <!-- 6. هدايا الـ VIP -->
+        <!-- الصورة المُصلحة لهدايا الـ VIP -->
         <section class="screen" data-color="#50C878">
             <div class="bg-text-marquee">VIP GIFTS • EXCLUSIVE • </div>
-            <img src="https://images.unsplash.com/photo-1549465220-1a8b94384480?auto=format&fit=crop&w=2000&q=100" alt="هدايا" class="bg-image">
+            <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=2000&q=100" alt="هدايا VIP" class="bg-image">
             <div class="overlay"></div>
             <div class="content">
                 <span class="category">Royal Concierge</span>
@@ -239,91 +246,85 @@
         </section>
     </div>
 
-    <!-- ================= سكريبت التحكم ================= -->
     <script>
-        // --- 1. حل مشكلة الدقة (Retina Display Fix) للذرات الذهبية ---
+        // إعداد دقة الكانفاس لتكون 4K على الجوالات
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
-        
-        // جلب نسبة دقة الشاشة (للجوالات الحديثة تكون 2 أو 3)
         const dpr = window.devicePixelRatio || 1;
-        
-        // تعيين حجم الكانفاس الفيزيائي ليكون مضروباً بالدقة
         canvas.width = window.innerWidth * dpr;
         canvas.height = window.innerHeight * dpr;
-        
-        // تعيين حجم الكانفاس المرئي بـ CSS
-        canvas.style.width = window.innerWidth + 'px';
-        canvas.style.height = window.innerHeight + 'px';
-        
-        // تعديل الرسم ليتناسب مع الدقة
         ctx.scale(dpr, dpr);
 
         let particlesArray = [];
-        let mouse = { x: null, y: null, radius: 100 }; // تصغير نصف القطر ليتناسب مع الجوال
+        let mouse = { x: null, y: null, radius: 120 }; 
         let isExploding = false;
 
         window.addEventListener('touchmove', e => { if(!isExploding){ mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }});
         window.addEventListener('touchend', () => { if(!isExploding){ mouse.x = undefined; mouse.y = undefined; }});
+        window.addEventListener('mousemove', e => { if(!isExploding){ mouse.x = e.clientX; mouse.y = e.clientY; }});
+        window.addEventListener('mouseout', () => { mouse.x = undefined; mouse.y = undefined; });
 
-        // رسم النصوص (ZEINA و متـجر) بوضوح فائق
         function drawText() {
             ctx.fillStyle = 'white';
             ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
             
-            // كلمة ZEINA عملاقة
-            let fontSizeZeina = window.innerWidth < 600 ? 90 : 250; 
+            let fontSizeZeina = window.innerWidth < 600 ? 110 : 280; 
             ctx.font = `900 ${fontSizeZeina}px 'Playfair Display', serif`;
             let zeinaY = window.innerHeight / 2.3;
             ctx.fillText('ZEINA', window.innerWidth / 2, zeinaY);
 
-            // كلمة متـجر تحتها
-            let fontSizeMatjar = window.innerWidth < 600 ? 30 : 60;
+            let fontSizeMatjar = window.innerWidth < 600 ? 35 : 70;
             ctx.font = `700 ${fontSizeMatjar}px 'Amiri', serif`;
-            ctx.fillText('متـجر', window.innerWidth / 2, zeinaY + (fontSizeZeina * 0.7));
+            ctx.fillText('متـجر', window.innerWidth / 2, zeinaY + (fontSizeZeina * 0.65));
         }
 
         drawText();
-        
-        // سحب البيانات من الكانفاس الفعلي (المضروب بـ dpr)
         let textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
         class Particle {
             constructor(x, y) {
-                // تقسيم الإحداثيات على dpr لترجع لحجم الشاشة الطبيعي
-                this.x = (x / dpr) + Math.random() * 20 - 10; 
-                this.y = (y / dpr) + Math.random() * 20 - 10;
-                this.size = Math.random() * 1.5 + 0.5; // ذرات أدق لشكل أنظف
+                this.x = (x / dpr) + Math.random() * 10 - 5; 
+                this.y = (y / dpr) + Math.random() * 10 - 5;
+                // تكبير الذرات قليلاً لكي يدمجها فلتر الـ SVG وتشكل سائلاً ذهبياً
+                this.size = Math.random() * 3 + 2; 
                 this.baseX = x / dpr; this.baseY = y / dpr;
-                this.density = (Math.random() * 30) + 5;
-                let opacity = Math.random() * 0.6 + 0.4;
+                this.density = (Math.random() * 20) + 5;
+                
+                // متجهات الحركة للانفجار البطيء
+                this.vx = (Math.random() - 0.5) * 3;
+                this.vy = (Math.random() - 0.5) * 3 - 0.5; // انحراف خفيف للأعلى
+
+                let opacity = Math.random() * 0.8 + 0.2;
                 this.color = `rgba(229, 193, 88, ${opacity})`;
             }
             draw() {
                 ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.closePath(); ctx.fill();
             }
             update() {
-                let dx = mouse.x - this.x; let dy = mouse.y - this.y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                let forceDirectionX = dx / distance; let forceDirectionY = dy / distance;
-                let force = (mouse.radius - distance) / mouse.radius;
-                
-                let explosionMultiplier = isExploding ? 8 : 1;
-                let directionX = forceDirectionX * force * this.density * explosionMultiplier;
-                let directionY = forceDirectionY * force * this.density * explosionMultiplier;
-
-                if (distance < mouse.radius) {
-                    this.x -= directionX; this.y -= directionY;
-                } else if (!isExploding) {
-                    if (this.x !== this.baseX) { this.x -= (this.x - this.baseX) / 12; }
-                    if (this.y !== this.baseY) { this.y -= (this.y - this.baseY) / 12; }
+                if (isExploding) {
+                    // حركة بطيئة سينمائية (Slow-Motion) لمدة 4 ثوانٍ
+                    this.x += this.vx * 0.4;
+                    this.y += this.vy * 0.4;
+                    this.size *= 0.995; // تلاشي تدريجي للذهب السائل
+                } else {
+                    let dx = mouse.x - this.x; let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    let force = (mouse.radius - distance) / mouse.radius;
+                    
+                    if (distance < mouse.radius) {
+                        this.x -= (dx / distance) * force * this.density; 
+                        this.y -= (dy / distance) * force * this.density;
+                    } else {
+                        if (this.x !== this.baseX) { this.x -= (this.x - this.baseX) / 10; }
+                        if (this.y !== this.baseY) { this.y -= (this.y - this.baseY) / 10; }
+                    }
                 }
             }
         }
 
         function init() {
             particlesArray = [];
-            // المسح الكثيف بـ 4 بيكسلات للحفاظ على الأداء مع الدقة العالية
+            // كثافة عالية للذرات لتكوين كتلة سائلة بدون فجوات
             for (let y = 0; y < textCoordinates.height; y += 4) {
                 for (let x = 0; x < textCoordinates.width; x += 4) {
                     if (textCoordinates.data[(y * 4 * textCoordinates.width) + (x * 4) + 3] > 128) {
@@ -336,7 +337,6 @@
 
         let animationId;
         function animate() {
-            // المسح بناءً على الإحداثيات الطبيعية للشاشة
             ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
             ctx.globalCompositeOperation = 'lighter'; 
             particlesArray.forEach(p => { p.draw(); p.update(); });
@@ -344,7 +344,7 @@
         }
         animate();
 
-        // --- 2. الانفجار السحري والانتقال (Flash & Explode) ---
+        // --- الانفجار البطيء (4 ثواني) ---
         const startBtn = document.getElementById('start-btn');
         const introScreen = document.getElementById('intro-screen');
         const storeScreen = document.getElementById('store-screen');
@@ -354,18 +354,13 @@
         startBtn.addEventListener('click', function(e) {
             e.preventDefault();
             uiLayer.style.opacity = '0';
-            
-            // فلاش أبيض سينمائي كضوء الكاميرا
-            flash.style.opacity = '1';
-            
-            setTimeout(() => { flash.style.opacity = '0'; }, 150);
+            flash.style.opacity = '0.8';
+            setTimeout(() => { flash.style.opacity = '0'; }, 300);
 
-            // الانفجار
+            // تفعيل حالة الانفجار البطيء
             isExploding = true;
-            mouse.x = window.innerWidth / 2;
-            mouse.y = window.innerHeight / 2;
-            mouse.radius = 4000; 
 
+            // الانتظار 4 ثوانٍ كاملة للاستمتاع بمنظر الذهب وهو يتطاير في انعدام الجاذبية
             setTimeout(() => {
                 introScreen.style.opacity = '0';
                 storeScreen.style.visibility = 'visible';
@@ -375,11 +370,11 @@
                 setTimeout(() => {
                     introScreen.style.display = 'none';
                     cancelAnimationFrame(animationId);
-                }, 1500);
-            }, 600);
+                }, 2000); // إغلاق الكانفاس بعد التلاشي
+            }, 4000); // 4000 ملي ثانية = 4 ثوانٍ
         });
 
-        // --- 3. حركة وتفاعل المتجر ---
+        // --- حركة التمرير ---
         const screens = document.querySelectorAll('.screen');
         const dots = document.querySelectorAll('.dot');
         const root = document.documentElement;
