@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>متجر زينة | البلاتين السائل</title>
-    <!-- أضفت خط Cairo لضمان أن تكون كلمة "متجر" عريضة وجميلة جداً -->
+    <title>متجر زينة | صفاء البلاتين المطلق</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Amiri:wght@400;700&family=Cairo:wght@900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -22,18 +21,18 @@
         }
 
         /* =========================================
-           شاشة الافتتاح (البلاتين الأبيض السائل)
+           شاشة الافتتاح (الصفاء المطلق 4K)
            ========================================= */
         #intro-screen {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 100;
-            background: radial-gradient(circle at center, #10141e 0%, #030407 100%);
+            background: radial-gradient(circle at center, #0f121a 0%, #030407 100%);
             transition: opacity 2s cubic-bezier(0.8, 0, 0.2, 1);
         }
 
-        /* توهج أبيض فضي حول الكلمات */
         .canvas-container {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
-            filter: url('#gooey') drop-shadow(0 0 20px rgba(255, 255, 255, 0.6));
+            /* فلتر مُحسن: يعطي مظهر السائل بدون طمس ملامح الحروف */
+            filter: url('#gooey') drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
         }
 
         #particle-canvas { display: block; width: 100%; height: 100%; }
@@ -52,15 +51,15 @@
 
         .header-intro {
             font-family: 'Playfair Display', serif; font-size: 14px; letter-spacing: 12px;
-            color: rgba(255, 255, 255, 0.8); text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6); text-transform: uppercase;
         }
 
         .enter-btn {
             pointer-events: auto; display: inline-block; padding: 18px 50px;
-            background: rgba(3, 4, 7, 0.4); color: #fff;
+            background: rgba(3, 4, 7, 0.6); color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 50px;
             font-size: 20px; font-weight: bold; text-decoration: none; transition: all 0.5s ease;
-            backdrop-filter: blur(20px); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(15px); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
         }
 
         .enter-btn:active { transform: scale(0.92); background: #fff; color: #000; }
@@ -138,12 +137,14 @@
 </head>
 <body>
 
-    <!-- فلتر صهر الجزيئات -->
+    <!-- فلتر صهر الجزيئات المُخفف ليحافظ على صفاء الـ 4K -->
     <svg style="display: none;">
         <defs>
             <filter id="gooey">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
-                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -9" result="gooey" />
+                <!-- تم تقليل قوة التمويه (stdDeviation) للحفاظ على حدة الحروف -->
+                <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur" />
+                <!-- تعزيز تباين السائل ليكون مشدوداً وناصعاً -->
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -10" result="gooey" />
                 <feComposite in="SourceGraphic" in2="gooey" operator="atop"/>
             </filter>
         </defs>
@@ -151,7 +152,6 @@
 
     <div id="flash"></div>
 
-    <!-- شاشة الافتتاح (الأبيض السائل) -->
     <div id="intro-screen">
         <div class="canvas-container">
             <canvas id="particle-canvas"></canvas>
@@ -233,6 +233,7 @@
 
         <section class="screen" data-color="#50C878">
             <div class="bg-text-marquee">VIP GIFTS • EXCLUSIVE • </div>
+            <!-- صورة الهدية بجودة فائقة تم تصحيحها -->
             <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=2000&q=100" alt="هدايا VIP" class="bg-image">
             <div class="overlay"></div>
             <div class="content">
@@ -247,13 +248,15 @@
     <script>
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        
+        // حساب دقة شاشة العميل لضمان نقاء 4K
         const dpr = window.devicePixelRatio || 1;
         canvas.width = window.innerWidth * dpr;
         canvas.height = window.innerHeight * dpr;
         ctx.scale(dpr, dpr);
 
         let particlesArray = [];
-        let mouse = { x: null, y: null, radius: 120 }; 
+        let mouse = { x: null, y: null, radius: 100 }; 
         let isExploding = false;
 
         window.addEventListener('touchmove', e => { if(!isExploding){ mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }});
@@ -265,16 +268,16 @@
             ctx.fillStyle = 'white';
             ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
             
-            // كلمة ZEINA عريضة وواضحة جداً
-            let fontSizeZeina = window.innerWidth < 600 ? 110 : 280; 
+            // ZEINA بخط عريض وواضح
+            let fontSizeZeina = window.innerWidth < 600 ? 110 : 250; 
             ctx.font = `900 ${fontSizeZeina}px 'Playfair Display', serif`;
-            let zeinaY = window.innerHeight / 2.3;
+            let zeinaY = window.innerHeight / 2.5; 
             ctx.fillText('ZEINA', window.innerWidth / 2, zeinaY);
 
-            // كلمة متجر أصبحت الآن تستخدم خط Cairo بوزن 900 لتكون عريضة ومبهرة
-            let fontSizeMatjar = window.innerWidth < 600 ? 45 : 90;
+            // متجر بخط القاهرة العريض جداً مع زيادة المسافة لتفادي التشابك
+            let fontSizeMatjar = window.innerWidth < 600 ? 45 : 80;
             ctx.font = `900 ${fontSizeMatjar}px 'Cairo', sans-serif`;
-            ctx.fillText('متـجر', window.innerWidth / 2, zeinaY + (fontSizeZeina * 0.65));
+            ctx.fillText('متـجر', window.innerWidth / 2, zeinaY + (fontSizeZeina * 0.75));
         }
 
         drawText();
@@ -282,17 +285,20 @@
 
         class Particle {
             constructor(x, y) {
-                this.x = (x / dpr) + Math.random() * 10 - 5; 
-                this.y = (y / dpr) + Math.random() * 10 - 5;
-                this.size = Math.random() * 3 + 2.5; 
-                this.baseX = x / dpr; this.baseY = y / dpr;
+                // إلغاء التشتت العشوائي الأولي لتكوين الحروف بشكل مثالي وحاد
+                this.x = x / dpr; 
+                this.y = y / dpr;
+                // تصغير حجم الذرات للحفاظ على حدة الزوايا في الخط
+                this.size = Math.random() * 1.2 + 0.6; 
+                this.baseX = this.x; 
+                this.baseY = this.y;
                 this.density = (Math.random() * 20) + 5;
                 
-                this.vx = (Math.random() - 0.5) * 3;
-                this.vy = (Math.random() - 0.5) * 3 - 0.5; 
+                // قوة الانفجار
+                this.vx = (Math.random() - 0.5) * 4;
+                this.vy = (Math.random() - 0.5) * 4 - 0.5; 
 
-                // اللون أصبح أبيض ناصع مع تفاوت خفيف في الشفافية لإعطاء واقعية سائلة
-                let opacity = Math.random() * 0.5 + 0.5;
+                let opacity = Math.random() * 0.4 + 0.6; // بياض ساطع
                 this.color = `rgba(255, 255, 255, ${opacity})`;
             }
             draw() {
@@ -300,10 +306,10 @@
             }
             update() {
                 if (isExploding) {
-                    // حركة سينمائية بطيئة (4 ثواني)
-                    this.x += this.vx * 0.4;
-                    this.y += this.vy * 0.4;
-                    this.size *= 0.995; 
+                    // تأثير Slow-Motion الممتد
+                    this.x += this.vx * 0.35;
+                    this.y += this.vy * 0.35;
+                    this.size *= 0.996; // تلاشي بطيء جداً
                 } else {
                     let dx = mouse.x - this.x; let dy = mouse.y - this.y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
@@ -313,8 +319,9 @@
                         this.x -= (dx / distance) * force * this.density; 
                         this.y -= (dy / distance) * force * this.density;
                     } else {
-                        if (this.x !== this.baseX) { this.x -= (this.x - this.baseX) / 10; }
-                        if (this.y !== this.baseY) { this.y -= (this.y - this.baseY) / 10; }
+                        // عودة مغناطيسية دقيقة لمكانها الأصلي
+                        if (this.x !== this.baseX) { this.x -= (this.x - this.baseX) / 8; }
+                        if (this.y !== this.baseY) { this.y -= (this.y - this.baseY) / 8; }
                     }
                 }
             }
@@ -322,8 +329,10 @@
 
         function init() {
             particlesArray = [];
-            for (let y = 0; y < textCoordinates.height; y += 4) {
-                for (let x = 0; x < textCoordinates.width; x += 4) {
+            // المسافة بين الذرات محسوبة بناءً على دقة الشاشة لضمان عدم التكدس الذي يسبب التشابك
+            const gap = Math.max(3, Math.round(dpr * 2.5)); 
+            for (let y = 0; y < textCoordinates.height; y += gap) {
+                for (let x = 0; x < textCoordinates.width; x += gap) {
                     if (textCoordinates.data[(y * 4 * textCoordinates.width) + (x * 4) + 3] > 128) {
                         particlesArray.push(new Particle(x, y));
                     }
@@ -341,7 +350,7 @@
         }
         animate();
 
-        // --- الانفجار البطيء الأبيض (4 ثواني) ---
+        // --- الانفجار البطيء (Slow Motion) لمدة 4 ثوانٍ ---
         const startBtn = document.getElementById('start-btn');
         const introScreen = document.getElementById('intro-screen');
         const storeScreen = document.getElementById('store-screen');
@@ -351,11 +360,12 @@
         startBtn.addEventListener('click', function(e) {
             e.preventDefault();
             uiLayer.style.opacity = '0';
-            flash.style.opacity = '0.8';
+            flash.style.opacity = '0.9';
             setTimeout(() => { flash.style.opacity = '0'; }, 300);
 
             isExploding = true;
 
+            // بعد 4 ثوانٍ من الانفجار البطيء والساحر، ندخل المتجر
             setTimeout(() => {
                 introScreen.style.opacity = '0';
                 storeScreen.style.visibility = 'visible';
@@ -364,11 +374,12 @@
                 
                 setTimeout(() => {
                     introScreen.style.display = 'none';
-                    cancelAnimationFrame(animationId);
+                    cancelAnimationFrame(animationId); // توفير البطارية
                 }, 2000); 
-            }, 4000); // انفجار بطيء وساحر يستمر لـ 4 ثوانٍ
+            }, 4000); // 4 ثوانٍ كاملة
         });
 
+        // --- التمرير وتغيير الألوان ---
         const screens = document.querySelectorAll('.screen');
         const dots = document.querySelectorAll('.dot');
         const root = document.documentElement;
