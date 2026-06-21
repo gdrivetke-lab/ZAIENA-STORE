@@ -3,286 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#050508">
-    <title>متجر زينة | التحفة الفنية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    
+    <title>متجر زينة | تفاعل الذرات الذهبية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Amiri:wght@400&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* اللون الأساسي سيتغير برمجياً حسب كل قسم */
-            --theme-color: #D4AF37; 
-            --dark-bg: #050508;
+            --gold: #D4AF37;
+            --dark: #030305;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--dark-bg);
-            font-family: 'Amiri', serif;
+            background-color: var(--dark);
             color: #fff;
-            scroll-snap-type: y mandatory;
-            overflow-y: scroll;
-            height: 100vh;
-            scroll-behavior: smooth;
-            transition: --theme-color 1s ease; /* انتقال لوني سلس */
+            font-family: 'Amiri', serif;
+            overflow: hidden; /* نمنع التمرير لأنها شاشة تفاعلية */
+            touch-action: none; /* لمنع حركات المتصفح الافتراضية عند اللمس */
         }
 
-        body::-webkit-scrollbar { display: none; }
-
-        /* حاوية الشاشات */
-        .screen {
-            height: 100vh;
+        /* لوحة الرسم الفيزيائية */
+        #particle-canvas {
+            display: block;
             width: 100vw;
-            scroll-snap-align: start;
-            position: relative;
-            overflow: hidden;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* واجهة المستخدم (تطفو فوق الذرات) */
+        .ui-layer {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 2;
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 20px;
+            pointer-events: none; /* حتى يمرر اللمس للوحة الخلفية */
         }
 
-        /* صورة الخلفية مع تأثير التنفس (Breathing Effect) */
-        .bg-image {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; z-index: 1;
-            filter: brightness(0.5) contrast(1.1);
-            transform: scale(1.1);
-            transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1), filter 1.5s ease;
-        }
-
-        .screen.active .bg-image {
-            transform: scale(1);
-            filter: brightness(0.75) contrast(1.1);
-            animation: breathe 20s infinite alternate linear; /* حركة بطيئة مستمرة */
-        }
-
-        @keyframes breathe {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.08); }
-        }
-
-        /* التدرج اللوني للظلال */
-        .overlay {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 70%;
-            background: linear-gradient(to top, var(--dark-bg) 0%, rgba(5,5,8,0.8) 30%, rgba(5,5,8,0) 100%);
-            z-index: 2;
-        }
-
-        /* المحتوى */
-        .content {
-            position: relative; z-index: 3;
-            padding: 30px 25px 60px;
-            transform: translateY(40px);
-            opacity: 0;
-            transition: transform 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0.2s, opacity 1s ease 0.2s;
-        }
-
-        .screen.active .content {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .category {
-            font-family: 'Playfair Display', serif; font-size: 12px;
-            color: var(--theme-color); letter-spacing: 4px; text-transform: uppercase;
-            margin-bottom: 15px; display: block;
-            transition: color 1s ease;
-        }
-
-        .title {
-            font-family: 'Playfair Display', serif; font-size: 42px;
-            margin-bottom: 15px; font-weight: 700; line-height: 1.1;
-            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
-
-        .desc {
-            font-size: 17px; color: #c4c4c4; line-height: 1.7;
-            margin-bottom: 35px; max-width: 90%;
-        }
-
-        /* زر الشراء الفاخر */
-        .buy-btn {
-            display: inline-flex; align-items: center; justify-content: center;
-            width: 100%; padding: 20px;
-            background-color: transparent; 
-            color: var(--theme-color);
-            border: 1px solid var(--theme-color);
-            border-radius: 0px; /* زوايا حادة للفخامة */
-            font-size: 18px; font-weight: bold;
-            text-decoration: none; 
-            transition: all 0.5s ease;
-            position: relative; overflow: hidden;
-        }
-        
-        .buy-btn::after {
-            content: ''; position: absolute; top: 0; left: -100%;
-            width: 100%; height: 100%; background: var(--theme-color);
-            transition: left 0.4s ease; z-index: -1;
-        }
-
-        .buy-btn:active { transform: scale(0.98); }
-        .buy-btn:active::after { left: 0; }
-        .buy-btn:active { color: var(--dark-bg); }
-
-        /* شريط التقدم الجانبي (Pagination) */
-        .pagination {
-            position: fixed; right: 15px; top: 50%; transform: translateY(-50%);
-            z-index: 100; display: flex; flex-direction: column; gap: 12px;
-        }
-        .dot {
-            width: 4px; height: 4px; background: rgba(255,255,255,0.3);
-            border-radius: 50%; transition: all 0.4s ease;
-        }
-        .dot.active {
-            height: 25px; border-radius: 2px;
-            background: var(--theme-color);
-        }
-
-        /* زر الـ VIP العائم (Concierge) */
-        .vip-concierge {
-            position: fixed; bottom: 30px; left: 20px;
-            width: 55px; height: 55px;
-            background: var(--theme-color);
-            border-radius: 50%; z-index: 100;
-            display: flex; justify-content: center; align-items: center;
-            text-decoration: none; font-size: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            transition: background 1s ease, transform 0.3s ease;
-            animation: pulse-ring 2.5s infinite;
-        }
-        .vip-concierge:active { transform: scale(0.9); }
-
-        @keyframes pulse-ring {
-            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
-        }
-
-        /* الشاشة الافتتاحية */
-        .hero-center {
-            position: absolute; top: 40%; left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 3; text-align: center; width: 100%;
-        }
-        .hero-title {
-            font-family: 'Cinzel', 'Playfair Display', serif; font-size: 55px;
-            color: var(--theme-color); letter-spacing: 12px;
-            transition: color 1s ease;
-        }
-        .hero-sub {
-            font-size: 16px; letter-spacing: 4px; margin-top: 15px; color: #fff;
+        .header {
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            letter-spacing: 6px;
+            color: rgba(212, 175, 55, 0.6);
             text-transform: uppercase;
+        }
+
+        .footer-action {
+            pointer-events: auto; /* تفعيل اللمس للزر فقط */
+            text-align: center;
+        }
+
+        .enter-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            border-radius: 30px;
+            font-size: 18px;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .enter-btn:active {
+            background: var(--gold);
+            color: var(--dark);
+            transform: scale(0.95);
+        }
+
+        .hint {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #888;
+            letter-spacing: 2px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-    <!-- مؤشرات التصفح الجانبية -->
-    <div class="pagination">
-        <div class="dot active" data-index="0"></div>
-        <div class="dot" data-index="1"></div>
-        <div class="dot" data-index="2"></div>
-        <div class="dot" data-index="3"></div>
-        <div class="dot" data-index="4"></div>
+    <!-- الشاشة القماشية التي سيرسم عليها الجافاسكربت ملايين الذرات -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- الواجهة الأمامية -->
+    <div class="ui-layer">
+        <div class="header">Exclusive Collections</div>
+        
+        <div class="footer-action">
+            <a href="#" class="enter-btn">ادخل إلى عالم زينة</a>
+            <div class="hint">المس الشاشة لتحريك ذرات الذهب</div>
+        </div>
     </div>
 
-    <!-- زر المساعد الشخصي الثابت (الواتساب) -->
-    <!-- يمكنك تغيير الأيقونة لنص أو صورة، هنا استخدمنا رمز محادثة بسيط -->
-    <a href="https://wa.me/972526177768?text=أهلاً،%20أحتاج%20إلى%20مساعدة%20في%20اختيار%20هدية." class="vip-concierge" target="_blank" id="concierge">
-        <span style="color: var(--dark-bg);">✦</span>
-    </a>
-
-    <!-- 1. الرئيسية (ذهبي) -->
-    <section class="screen active" data-color="#D4AF37">
-        <img src="https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?auto=format&fit=crop&w=800&q=80" alt="خلفية" class="bg-image">
-        <div class="overlay" style="background: rgba(5,5,8,0.5);"></div>
-        <div class="hero-center">
-            <div class="hero-title">ZEINA</div>
-            <div class="hero-sub">فنّ الإهداء المتناهي</div>
-        </div>
-    </section>
-
-    <!-- 2. العطور (ذهبي وردي) -->
-    <section class="screen" data-color="#E0A96D">
-        <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=80" alt="عطور" class="bg-image">
-        <div class="overlay"></div>
-        <div class="content">
-            <span class="category">Niche Fragrances</span>
-            <h2 class="title">عطور النخبة</h2>
-            <p class="desc">خلاصات نادرة تُقطّر بعناية لتأسر الحواس. عطرٌ يعكس حضورك ويترك أثراً لا يُنسى قبل أن تنطق بكلمة.</p>
-            <a href="https://wa.me/972526177768?text=استفسار%20عن%20العطور" class="buy-btn" target="_blank">اكتشف المجموعة</a>
-        </div>
-    </section>
-
-    <!-- 3. الساعات (بلاتيني) -->
-    <section class="screen" data-color="#E5E4E2">
-        <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=800&q=80" alt="ساعات" class="bg-image">
-        <div class="overlay"></div>
-        <div class="content">
-            <span class="category">Haute Horlogerie</span>
-            <h2 class="title">الزمن المُلهم</h2>
-            <p class="desc">تعقيدات ميكانيكية تُصاغ كالتحف. ساعة لا تخبرك بالوقت فقط، بل تروي قصة هيبتك ووقارك.</p>
-            <a href="https://wa.me/972526177768?text=استفسار%20عن%20الساعات" class="buy-btn" target="_blank">اكتشف المجموعة</a>
-        </div>
-    </section>
-
-    <!-- 4. الحقائب والجلديات (عنابي/جلدي) -->
-    <section class="screen" data-color="#B85D19">
-        <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=800&q=80" alt="حقائب" class="bg-image">
-        <div class="overlay"></div>
-        <div class="content">
-            <span class="category">Fine Leather</span>
-            <h2 class="title">أصالة الجلود</h2>
-            <p class="desc">جلود استثنائية صُنعت بحرفية يدوية صارمة لتكون الرفيق الأنيق الذي يليق بإطلالتك الجريئة.</p>
-            <a href="https://wa.me/972526177768?text=استفسار%20عن%20الحقائب" class="buy-btn" target="_blank">اكتشف المجموعة</a>
-        </div>
-    </section>
-
-    <!-- 5. هدايا الـ VIP (زمردي ملكي) -->
-    <section class="screen" data-color="#50C878">
-        <img src="https://images.unsplash.com/photo-1549465220-1a8b94384480?auto=format&fit=crop&w=800&q=80" alt="هدايا" class="bg-image">
-        <div class="overlay"></div>
-        <div class="content">
-            <span class="category">VIP Experiences</span>
-            <h2 class="title">هدايا لا تُنسى</h2>
-            <p class="desc">صناديق فاخرة تُصمم خصيصاً لتخليد أعظم اللحظات. لأن الهدية من زينة هي رسالة صامتة تتجاوز الكلمات.</p>
-            <a href="https://wa.me/972526177768?text=استفسار%20عن%20صناديق%20الـVIP" class="buy-btn" target="_blank">صمم هديتك الخاصة</a>
-        </div>
-    </section>
-
-    <!-- الجافاسكربت لإدارة الألوان والحركات -->
     <script>
-        const screens = document.querySelectorAll('.screen');
-        const dots = document.querySelectorAll('.dot');
-        const root = document.documentElement;
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
-        // إعداد المراقب لمراقبة الشاشة النشطة
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.6 // تتفعل عندما يظهر 60% من القسم
-        };
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // 1. تفعيل حركات الشاشة
-                    screens.forEach(s => s.classList.remove('active'));
-                    entry.target.classList.add('active');
+        let particlesArray = [];
+        let mouse = { x: null, y: null, radius: 100 };
 
-                    // 2. تحديث اللون الأساسي للموقع بالكامل
-                    const newColor = entry.target.getAttribute('data-color');
-                    root.style.setProperty('--theme-color', newColor);
+        // التفاعل مع الماوس واللمس (للهواتف)
+        window.addEventListener('mousemove', function(event) {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
 
-                    // 3. تحديث النقاط الجانبية
-                    const index = Array.from(screens).indexOf(entry.target);
-                    dots.forEach(dot => dot.classList.remove('active'));
-                    dots[index].classList.add('active');
+        window.addEventListener('touchmove', function(event) {
+            mouse.x = event.touches[0].clientX;
+            mouse.y = event.touches[0].clientY;
+        });
+
+        window.addEventListener('mouseout', function() {
+            mouse.x = undefined;
+            mouse.y = undefined;
+        });
+
+        window.addEventListener('touchend', function() {
+            mouse.x = undefined;
+            mouse.y = undefined;
+        });
+
+        // رسم النص وسحب إحداثيات البيكسلات لإنشاء الذرات
+        ctx.fillStyle = 'white';
+        // تعديل حجم الخط ليتناسب مع شاشات الجوال والكمبيوتر
+        let fontSize = canvas.width < 600 ? 60 : 150; 
+        ctx.font = `bold ${fontSize}px 'Playfair Display', serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('ZEINA', canvas.width / 2, canvas.height / 2.2);
+
+        const textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x + Math.random() * 20 - 10;
+                this.y = y + Math.random() * 20 - 10;
+                this.size = Math.random() * 2 + 0.5;
+                this.baseX = x;
+                this.baseY = y;
+                // كثافة مختلفة لكل ذرة لتعطي سرعة تناثر مختلفة
+                this.density = (Math.random() * 30) + 5; 
+                // لون ذهبي بدرجات عشوائية خفيفة
+                let opacity = Math.random() * 0.5 + 0.5;
+                this.color = `rgba(212, 175, 55, ${opacity})`;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            update() {
+                // حساب المسافة بين لمسة المستخدم والذرة
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // قوة الدفع والجاذبية
+                let forceDirectionX = dx / distance;
+                let forceDirectionY = dy / distance;
+                let maxDistance = mouse.radius;
+                let force = (maxDistance - distance) / maxDistance;
+                let directionX = forceDirectionX * force * this.density;
+                let directionY = forceDirectionY * force * this.density;
+
+                // إذا كان المستخدم يلمس قريباً من الذرة، تتطاير
+                if (distance < mouse.radius) {
+                    this.x -= directionX;
+                    this.y -= directionY;
+                } else {
+                    // إذا ابتعد المستخدم، تعود الذرة لمكانها الأصلي كالمغناطيس
+                    if (this.x !== this.baseX) {
+                        let dx = this.x - this.baseX;
+                        this.x -= dx / 10;
+                    }
+                    if (this.y !== this.baseY) {
+                        let dy = this.y - this.baseY;
+                        this.y -= dy / 10;
+                    }
                 }
-            });
-        }, observerOptions);
+            }
+        }
 
-        screens.forEach(screen => observer.observe(screen));
+        function init() {
+            particlesArray = [];
+            // فحص كل بيكسل، إذا كان غير شفاف، ننشئ مكانه ذرة
+            for (let y = 0, y2 = textCoordinates.height; y < y2; y += 4) {
+                for (let x = 0, x2 = textCoordinates.width; x < x2; x += 4) {
+                    if (textCoordinates.data[(y * 4 * textCoordinates.width) + (x * 4) + 3] > 128) {
+                        let positionX = x;
+                        let positionY = y;
+                        particlesArray.push(new Particle(positionX, positionY));
+                    }
+                }
+            }
+        }
+
+        init();
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].draw();
+                particlesArray[i].update();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // إعادة تشكيل الذرات عند تغيير حجم الشاشة أو تدوير الجوال
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            ctx.fillStyle = 'white';
+            fontSize = canvas.width < 600 ? 60 : 150; 
+            ctx.font = `bold ${fontSize}px 'Playfair Display', serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('ZEINA', canvas.width / 2, canvas.height / 2.2);
+            textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            init();
+        });
     </script>
 </body>
 </html>
