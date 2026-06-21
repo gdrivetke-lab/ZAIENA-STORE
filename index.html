@@ -7,9 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Amiri:wght@400;700&family=Cairo:wght@900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #E5C158;
+            --gold: #FFD700; /* أصفر ذهبي ساطع */
             --dark-bg: #030407;
-            --theme-color: #E5C158; 
+            --theme-color: #FFD700; 
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -29,17 +29,15 @@
             transition: opacity 2s cubic-bezier(0.8, 0, 0.2, 1);
         }
 
-        /* حاوية النص الصافي جداً (CSS Text) */
         #static-text-container {
             position: absolute; top: 45%; left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
             z-index: 5;
             width: 100%;
-            transition: opacity 0.1s; /* اختفاء سريع جداً وقت الفلاش */
+            transition: opacity 0.1s; 
         }
 
-        /* ZEINA بوضوح 4K لانهائي */
         .crisp-title {
             font-family: 'Playfair Display', serif;
             font-size: clamp(90px, 20vw, 250px);
@@ -47,34 +45,30 @@
             color: #ffffff;
             line-height: 1;
             margin: 0;
-            /* توهج بلاتيني صافي */
             text-shadow: 0 0 30px rgba(255, 255, 255, 0.6), 0 0 60px rgba(255, 255, 255, 0.2);
         }
 
-        /* كلمة متجر بوضوح 4K لانهائي */
+        /* تعديل كلمة متجر لتكون باللون الأصفر العريض */
         .crisp-subtitle {
             font-family: 'Cairo', sans-serif;
             font-size: clamp(35px, 8vw, 80px);
             font-weight: 900;
-            color: #ffffff;
+            color: var(--gold);
             margin-top: -10px;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
         }
 
-        /* الكانفاس سيكون مخفياً حتى لحظة الانفجار */
         #particle-canvas { 
             display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; 
-            opacity: 0; /* لا يظهر إلا وقت الانفجار */
+            opacity: 0; 
         }
 
-        /* فلاش سينمائي */
         #flash {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #fff; z-index: 101; opacity: 0; pointer-events: none;
-            transition: opacity 0.4s ease-out; /* فلاش أسرع لزيادة الدراما */
+            transition: opacity 0.4s ease-out; 
         }
 
-        /* واجهة الأزرار */
         .ui-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 10; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
@@ -175,19 +169,18 @@
     <!-- شاشة الافتتاح -->
     <div id="intro-screen">
         
-        <!-- 1. النص الثابت والناصع البياض (بدون بكسلة أبداً) -->
         <div id="static-text-container">
             <h1 class="crisp-title">ZEINA</h1>
             <h2 class="crisp-subtitle">متـجر</h2>
         </div>
 
-        <!-- 2. الكانفاس الخفي المخصص للانفجار فقط -->
         <canvas id="particle-canvas"></canvas>
         
         <div class="ui-layer" id="ui-layer">
             <div class="header-intro">L'Art de Vivre</div>
             <div class="footer-action">
-                <a href="#" class="enter-btn" id="start-btn">اقتحم عالم زينة</a>
+                <!-- تم تغيير الكلمة إلى دخول عالم زينة بناءً على طلبك -->
+                <a href="#" class="enter-btn" id="start-btn">دخول عالم زينة</a>
             </div>
         </div>
     </div>
@@ -199,7 +192,7 @@
             <div class="dot"></div><div class="dot"></div><div class="dot"></div>
         </div>
 
-        <section class="screen active" data-color="#D4AF37">
+        <section class="screen active" data-color="#FFD700">
             <div class="bg-text-marquee">EXCLUSIVE HANDBAGS • LUXURY • </div>
             <img src="https://images.unsplash.com/photo-1591561954557-26941169b49e?auto=format&fit=crop&w=2000&q=100" alt="حقائب" class="bg-image">
             <div class="overlay"></div>
@@ -261,7 +254,6 @@
 
         <section class="screen" data-color="#50C878">
             <div class="bg-text-marquee">VIP GIFTS • EXCLUSIVE • </div>
-            <!-- صورة الهدايا بجودة ممتازة -->
             <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=2000&q=100" alt="هدايا VIP" class="bg-image">
             <div class="overlay"></div>
             <div class="content">
@@ -284,17 +276,19 @@
         let particlesArray = [];
         let animationId;
 
-        // دالة إنشاء الذرات بناءً على النص للحظة الانفجار فقط
+        // دالة إنشاء الذرات
         function prepareExplosion() {
-            // رسم النص بشكل خفي على الكانفاس لأخذ إحداثياته
-            ctx.fillStyle = 'white';
             ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
             
+            // رسم ZEINA باللون الأبيض لتتطاير كذرات بيضاء
+            ctx.fillStyle = 'white';
             let fontSizeZeina = window.innerWidth < 600 ? 90 : 250; 
             ctx.font = `900 ${fontSizeZeina}px 'Playfair Display', serif`;
-            let zeinaY = window.innerHeight * 0.45; // مطابقة لمكان النص الثابت
+            let zeinaY = window.innerHeight * 0.45; 
             ctx.fillText('ZEINA', window.innerWidth / 2, zeinaY);
 
+            // رسم كلمة متجر باللون الأصفر لتتطاير كذرات صفراء ذهبية
+            ctx.fillStyle = '#FFD700';
             let fontSizeMatjar = window.innerWidth < 600 ? 35 : 80;
             ctx.font = `900 ${fontSizeMatjar}px 'Cairo', sans-serif`;
             ctx.fillText('متـجر', window.innerWidth / 2, zeinaY + (fontSizeZeina * 0.70));
@@ -302,40 +296,42 @@
             let textData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-            // تشكيل الجزيئات للانفجار
             const gap = Math.max(3, Math.round(dpr * 2)); 
             for (let y = 0; y < textData.height; y += gap) {
                 for (let x = 0; x < textData.width; x += gap) {
-                    if (textData.data[(y * 4 * textData.width) + (x * 4) + 3] > 128) {
-                        particlesArray.push(new Particle(x / dpr, y / dpr));
+                    const alpha = textData.data[(y * 4 * textData.width) + (x * 4) + 3];
+                    if (alpha > 128) {
+                        // استخراج لون البيكسل (أبيض أم أصفر) وتمريره للذرة
+                        const r = textData.data[(y * 4 * textData.width) + (x * 4)];
+                        const g = textData.data[(y * 4 * textData.width) + (x * 4) + 1];
+                        const b = textData.data[(y * 4 * textData.width) + (x * 4) + 2];
+                        particlesArray.push(new Particle(x / dpr, y / dpr, r, g, b));
                     }
                 }
             }
         }
 
         class Particle {
-            constructor(x, y) {
+            constructor(x, y, r, g, b) {
                 this.x = x; 
                 this.y = y;
                 this.size = Math.random() * 2 + 1; 
                 
-                // متجهات حركة الانفجار (تطاير في كل الاتجاهات)
                 const angle = Math.random() * Math.PI * 2;
                 const speed = Math.random() * 8 + 2;
                 this.vx = Math.cos(angle) * speed;
-                this.vy = Math.sin(angle) * speed - 2; // انحراف خفيف للأعلى لانعدام الجاذبية
+                this.vy = Math.sin(angle) * speed - 2; 
 
                 let opacity = Math.random() * 0.5 + 0.5;
-                this.color = `rgba(255, 255, 255, ${opacity})`;
+                this.color = `rgba(${r}, ${g}, ${b}, ${opacity})`; // دمج اللون المسحوب مع شفافية عشوائية
             }
             draw() {
                 ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.closePath(); ctx.fill();
             }
             update() {
-                // حركة سينمائية بطيئة جداً
                 this.x += this.vx * 0.15;
                 this.y += this.vy * 0.15;
-                this.size *= 0.992; // تلاشي تدريجي
+                this.size *= 0.992; 
             }
         }
 
@@ -346,7 +342,7 @@
             animationId = requestAnimationFrame(animateExplosion);
         }
 
-        // --- الانفجار السينمائي (4 ثواني) ---
+        // --- الانفجار السينمائي ---
         const startBtn = document.getElementById('start-btn');
         const introScreen = document.getElementById('intro-screen');
         const storeScreen = document.getElementById('store-screen');
@@ -357,24 +353,19 @@
         startBtn.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // 1. تجهيز الذرات في الخلفية فوراً
             prepareExplosion();
 
-            // 2. فلاش أبيض ساطع لإخفاء عملية التبديل
             uiLayer.style.opacity = '0';
             flash.style.opacity = '1';
             
             setTimeout(() => { 
-                // 3. أثناء الفلاش: إخفاء النص الثابت وإظهار الكانفاس وبدء الانفجار
                 staticText.style.opacity = '0';
                 canvas.style.opacity = '1';
                 animateExplosion();
                 
-                // 4. إخفاء الفلاش لتظهر الشاشة والذرات تتطاير ببطء
                 flash.style.opacity = '0'; 
             }, 300);
 
-            // 5. بعد 4 ثوانٍ من الانفجار البطيء والساحر، ندخل المتجر
             setTimeout(() => {
                 introScreen.style.opacity = '0';
                 storeScreen.style.visibility = 'visible';
@@ -383,9 +374,9 @@
                 
                 setTimeout(() => {
                     introScreen.style.display = 'none';
-                    cancelAnimationFrame(animationId); // توفير البطارية بعد انتهاء العرض
+                    cancelAnimationFrame(animationId);
                 }, 2000); 
-            }, 4000); // 4 ثوانٍ كاملة
+            }, 4000); 
         });
 
         // --- التمرير وتغيير الألوان ---
@@ -411,7 +402,6 @@
 
         screens.forEach(screen => observer.observe(screen));
 
-        // معالجة تغيير حجم الشاشة
         window.addEventListener('resize', function() {
             canvas.width = window.innerWidth * dpr;
             canvas.height = window.innerHeight * dpr;
