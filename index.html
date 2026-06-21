@@ -2,278 +2,283 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>متجر زينة | تحفة تفاعلية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر زينة | النخبة</title>
+    <!-- خطوط فاخرة -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;700&family=Playfair+Display:wght@400;700&display=swap');
-        
-        * { box-sizing: border-box; cursor: none; /* إخفاء الماوس الافتراضي */ }
-        
-        body { 
-            margin: 0; 
-            background: radial-gradient(circle at 50% 0%, #fdfbf7 0%, #f0e2b6 60%, #e3ce93 100%);
-            color: #3d2b1f; 
-            font-family: 'Amiri', serif; 
-            line-height: 1.8;
+        :root {
+            --gold: #D4AF37;
+            --dark: #0a0a0c;
+            --text: #f0e6d2;
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            cursor: none; /* إخفاء الماوس العادي */
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--text);
+            font-family: 'Amiri', serif;
             overflow-x: hidden;
-            position: relative;
-            min-height: 100vh;
         }
 
-        /* --- شاشة التحميل السينمائية --- */
-        #loader {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #05050a;
-            z-index: 99999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1.5s ease-out;
-        }
-        .loader-logo {
-            font-family: 'Cinzel', serif;
-            font-size: 4rem;
-            color: #d4af37;
-            letter-spacing: 15px;
-            animation: pulse 2s infinite alternate;
-        }
-        @keyframes pulse {
-            0% { text-shadow: 0 0 10px rgba(212, 175, 55, 0.2); transform: scale(1); }
-            100% { text-shadow: 0 0 40px rgba(212, 175, 55, 0.8); transform: scale(1.05); }
-        }
-
-        /* --- مؤشر الماوس المخصص --- */
-        .cursor-dot {
-            width: 8px; height: 8px;
-            background: #a67c00;
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 100000;
+        /* الماوس المخصص الاحترافي */
+        .custom-cursor {
+            position: fixed; top: 0; left: 0; width: 12px; height: 12px;
+            background-color: var(--gold); border-radius: 50%;
+            pointer-events: none; z-index: 9999;
             transform: translate(-50%, -50%);
-        }
-        .cursor-outline {
-            width: 40px; height: 40px;
-            border: 1px solid rgba(166, 124, 0, 0.5);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 100000;
-            transform: translate(-50%, -50%);
-            transition: width 0.2s, height 0.2s, background 0.2s;
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            mix-blend-mode: difference;
         }
 
-        /* ذرات الضوء في الخلفية */
-        .light-motes-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
-        }
-        .mote {
-            position: absolute; background: rgba(255, 255, 255, 0.8); border-radius: 50%;
-            box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.6); animation: floatUp 15s infinite ease-in-out; opacity: 0;
-        }
-        .mote:nth-child(1) { width: 8px; height: 8px; left: 10%; animation-duration: 18s; }
-        .mote:nth-child(2) { width: 12px; height: 12px; left: 35%; animation-duration: 22s; animation-delay: 3s; }
-        .mote:nth-child(3) { width: 6px; height: 6px; left: 65%; animation-duration: 15s; animation-delay: 7s; }
-        .mote:nth-child(4) { width: 15px; height: 15px; left: 50%; animation-duration: 20s; animation-delay: 5s; }
-        @keyframes floatUp { 0% { transform: translateY(100vh) scale(0.5); opacity: 0; } 50% { opacity: 0.7; } 100% { transform: translateY(-20vh) scale(1.5); opacity: 0; } }
-
-        /* الهيدر */
-        .header { text-align: center; padding: 100px 20px 50px; position: relative; z-index: 10; }
-        h1 { font-family: 'Cinzel', serif; font-size: 5rem; color: #a67c00; margin: 0; letter-spacing: 10px; }
-        .subtitle { font-family: 'Playfair Display', serif; font-style: italic; color: #7a5e33; letter-spacing: 5px; margin-top: 15px; font-size: 1.3rem; }
-
-        .main-wrapper { max-width: 1200px; margin: 0 auto; padding: 20px 20px 100px; position: relative; z-index: 10; }
-
-        /* شبكة المنتجات */
-        .luxury-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 50px; margin-top: 50px;
+        /* الهيدر السينمائي */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            position: relative; overflow: hidden;
         }
 
-        /* البطاقات مع تجهيزها للتأثير ثلاثي الأبعاد */
-        .luxury-card {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 4px;
-            text-align: center;
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 8vw; font-weight: 400;
+            text-transform: uppercase; letter-spacing: 0.2em;
+            color: var(--text); z-index: 2;
+            mix-blend-mode: difference;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5vw; color: var(--gold);
+            letter-spacing: 5px; margin-top: 20px; z-index: 2;
+        }
+
+        /* خلفية الهيدر البارالاكس */
+        .hero-bg {
+            position: absolute; top: -10%; left: -10%; width: 120%; height: 120%;
+            background: url('https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?q=80&w=2000&auto=format&fit=crop') center/cover;
+            opacity: 0.3; z-index: 1; filter: grayscale(50%);
+        }
+
+        /* المعرض الفني غير المتماثل */
+        .gallery {
+            padding: 10vw 5vw; display: flex; flex-direction: column; gap: 15vw;
+        }
+
+        .item {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 5vw; position: relative;
+        }
+
+        /* عكس اتجاه العناصر بالتبادل */
+        .item:nth-child(even) { flex-direction: row-reverse; }
+
+        .item-img-wrapper {
+            width: 45vw; height: 60vh; overflow: hidden;
             position: relative;
-            box-shadow: 0 15px 35px rgba(166, 124, 0, 0.08);
-            transform-style: preserve-3d; /* مهم جداً للـ 3D */
-            will-change: transform;
-            opacity: 0; /* مخفية في البداية لتأثير الظهور */
-            transform: translateY(50px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-        
-        .luxury-card.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
 
-        .category-tag { font-family: 'Cinzel', serif; font-size: 0.85rem; color: #a67c00; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; font-weight: 700; transform: translateZ(30px); }
-        .image-container { width: 100%; height: 350px; overflow: hidden; margin-bottom: 25px; border-radius: 2px; transform: translateZ(50px); }
-        .product-image { width: 100%; height: 100%; object-fit: cover; }
-        .luxury-card h3 { font-family: 'Playfair Display', serif; font-size: 2rem; color: #2c1e0b; margin: 15px 0 10px; font-weight: 700; transform: translateZ(40px); }
-        .product-description { color: #5c4a3d; font-size: 1.1rem; margin-bottom: 30px; height: 55px; transform: translateZ(20px); }
-        
-        .inquire-btn { 
-            display: inline-block; padding: 15px 40px; border: 1px solid #a67c00; color: #a67c00; 
-            text-decoration: none; font-family: 'Amiri', serif; font-size: 1.2rem; font-weight: bold;
-            transform: translateZ(60px); transition: all 0.3s;
+        .item-img {
+            width: 100%; height: 130%; /* أكبر من الحاوية لعمل البارالاكس */
+            object-fit: cover;
+            position: absolute; top: -15%; left: 0;
+            filter: brightness(0.8); transition: filter 0.5s;
         }
-        .inquire-btn:hover { background: #a67c00; color: #fff; letter-spacing: 2px; box-shadow: 0 0 15px rgba(166, 124, 0, 0.4); }
 
-        footer { text-align: center; padding: 60px 20px; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); color: #5c4a3d; border-top: 1px solid rgba(166, 124, 0, 0.3); }
-        footer .footer-logo { font-family: 'Cinzel', serif; font-size: 2rem; color: #a67c00; letter-spacing: 5px; margin-bottom: 15px; }
+        .item-img-wrapper:hover .item-img { filter: brightness(1.1); }
+
+        .item-content {
+            width: 40vw; padding: 2vw;
+        }
+
+        .item-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4vw; color: var(--gold); margin-bottom: 20px;
+        }
+
+        .item-desc {
+            font-size: 1.2vw; line-height: 2; color: #a0a0a0;
+            margin-bottom: 40px;
+        }
+
+        /* الزر المغناطيسي الفاخر */
+        .magnetic-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 150px; height: 150px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50%; text-decoration: none;
+            color: var(--gold); font-size: 1.2rem;
+            position: relative; transition: border-color 0.3s;
+        }
+
+        .magnetic-btn::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--gold); border-radius: 50%;
+            transform: scale(0); transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: -1;
+        }
+
+        .magnetic-btn:hover { color: var(--dark); border-color: var(--gold); }
+        .magnetic-btn:hover::before { transform: scale(1); }
+
+        /* الفوتر */
+        footer {
+            padding: 5vw; text-align: center; border-top: 1px solid rgba(255,255,255,0.05);
+            font-family: 'Playfair Display', serif; font-size: 2vw; color: var(--gold);
+        }
     </style>
 </head>
 <body>
 
-    <!-- شاشة التحميل -->
-    <div id="loader">
-        <div class="loader-logo">ZEINA</div>
-    </div>
+    <div class="custom-cursor"></div>
 
-    <!-- مؤشر الماوس السحري -->
-    <div class="cursor-dot" id="cursor-dot"></div>
-    <div class="cursor-outline" id="cursor-outline"></div>
+    <section class="hero">
+        <div class="hero-bg" id="heroBg"></div>
+        <h1 id="heroTitle">ZEINA</h1>
+        <div class="subtitle" id="heroSub">MAISON DE LUXE</div>
+    </section>
 
-    <div class="light-motes-container">
-        <div class="mote"></div><div class="mote"></div><div class="mote"></div><div class="mote"></div>
-    </div>
-
-    <header class="header">
-        <h1>ZEINA</h1>
-        <div class="subtitle">إشراقة الأناقة الخالدة</div>
-    </header>
-
-    <div class="main-wrapper">
-        <div class="luxury-grid">
-            
-            <!-- الساعات -->
-            <div class="luxury-card">
-                <div class="category-tag">Horology Collection</div>
-                <div class="image-container">
-                    <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=800&q=80" alt="ساعات" class="product-image">
-                </div>
-                <h3>ساعات النخبة</h3>
-                <p class="product-description">هندسة دقيقة وتصميم يتحدى الزمن.</p>
-                <a href="https://wa.me/972526177768?text=أهلاً،%20أود%20الاستفسار%20عن%20الساعات" class="inquire-btn" target="_blank">اكتشف القطعة</a>
+    <section class="gallery">
+        
+        <!-- قطعة 1 -->
+        <div class="item">
+            <div class="item-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1547996160-81dfa63595aa?q=80&w=1000&auto=format&fit=crop" class="item-img parallax-img" alt="Watch">
             </div>
-
-            <!-- الحقائب -->
-            <div class="luxury-card">
-                <div class="category-tag">Designer Bags</div>
-                <div class="image-container">
-                    <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=800&q=80" alt="حقائب" class="product-image">
-                </div>
-                <h3>حقائب استثنائية</h3>
-                <p class="product-description">جلود طبيعية نادرة وحرفية يدوية.</p>
-                <a href="https://wa.me/972526177768?text=أهلاً،%20أود%20الاستفسار%20عن%20الحقائب" class="inquire-btn" target="_blank">اكتشف القطعة</a>
+            <div class="item-content">
+                <h2 class="item-title">الزمن المُلهم</h2>
+                <p class="item-desc">ساعات نادرة تُصاغ بتعقيدات ميكانيكية دقيقة، حيث يلتقي التراث السويسري مع الرؤية العصرية لتعكس هيبتك في كل ثانية.</p>
+                <a href="https://wa.me/972526177768?text=استفسار%20عن%20الساعات" class="magnetic-btn" target="_blank">اقتنِ القطعة</a>
             </div>
-
-            <!-- الإكسسوارات -->
-            <div class="luxury-card">
-                <div class="category-tag">Exquisite Jewels</div>
-                <div class="image-container">
-                    <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80" alt="مجوهرات" class="product-image">
-                </div>
-                <h3>بريق الإكسسوارات</h3>
-                <p class="product-description">قطع مصاغة بشغف لتخطف الأنظار.</p>
-                <a href="https://wa.me/972526177768?text=أهلاً،%20أود%20الاستفسار%20عن%20الإكسسوارات" class="inquire-btn" target="_blank">اكتشف القطعة</a>
-            </div>
-
         </div>
-    </div>
+
+        <!-- قطعة 2 -->
+        <div class="item">
+            <div class="item-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?q=80&w=1000&auto=format&fit=crop" class="item-img parallax-img" alt="Jewelry">
+            </div>
+            <div class="item-content">
+                <h2 class="item-title">بريق أبدي</h2>
+                <p class="item-desc">ألماس نقي ومجوهرات تُنحت يدوياً لتكون إرثاً تتناقله الأجيال. كل زاوية تعكس قصة من الفخامة التي لا تضاهى.</p>
+                <a href="https://wa.me/972526177768?text=استفسار%20عن%20المجوهرات" class="magnetic-btn" target="_blank">اقتنِ القطعة</a>
+            </div>
+        </div>
+
+    </section>
 
     <footer>
-        <div class="footer-logo">ZEINA EXCLUSIVE</div>
-        &copy; 2026 زينة - الإشراقة التي لا تنطفئ.
+        ZEINA EXCLUSIVE &copy; 2026
     </footer>
 
-    <!-- سحر الجافاسكربت -->
+    <!-- استدعاء مكتبات الاحتراف العالمية -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
     <script>
-        // 1. إخفاء شاشة التحميل
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const loader = document.getElementById('loader');
-                loader.style.opacity = '0';
-                setTimeout(() => loader.style.display = 'none', 1500);
-            }, 2000); // الشعار ينبض لثانيتين قبل الفتح
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. التمرير السلس (Smooth Scroll)
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
         });
 
-        // 2. مؤشر الماوس المخصص
-        const cursorDot = document.getElementById('cursor-dot');
-        const cursorOutline = document.getElementById('cursor-outline');
-        
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // 2. الماوس السحري والأزرار المغناطيسية
+        const cursor = document.querySelector('.custom-cursor');
+        const magneticBtns = document.querySelectorAll('.magnetic-btn');
+
         window.addEventListener('mousemove', (e) => {
-            const posX = e.clientX;
-            const posY = e.clientY;
-            
-            cursorDot.style.left = `${posX}px`;
-            cursorDot.style.top = `${posY}px`;
-            
-            // إضافة تأخير بسيط للهالة لتعطي تأثير السلاسة
-            cursorOutline.animate({
-                left: `${posX}px`,
-                top: `${posY}px`
-            }, { duration: 500, fill: "forwards" });
-        });
-
-        // تكبير الماوس عند الوقوف على الأزرار
-        document.querySelectorAll('a').forEach(link => {
-            link.addEventListener('mouseenter', () => {
-                cursorOutline.style.width = '60px';
-                cursorOutline.style.height = '60px';
-                cursorOutline.style.background = 'rgba(166, 124, 0, 0.1)';
-            });
-            link.addEventListener('mouseleave', () => {
-                cursorOutline.style.width = '40px';
-                cursorOutline.style.height = '40px';
-                cursorOutline.style.background = 'transparent';
+            gsap.to(cursor, {
+                x: e.clientX,
+                y: e.clientY,
+                duration: 0.1,
+                ease: "power2.out"
             });
         });
 
-        // 3. التأثير ثلاثي الأبعاد للبطاقات (3D Tilt)
-        const cards = document.querySelectorAll('.luxury-card');
-        
-        cards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
+        magneticBtns.forEach(btn => {
+            btn.addEventListener('mousemove', function(e) {
+                const position = btn.getBoundingClientRect();
+                const x = e.clientX - position.left - position.width / 2;
+                const y = e.clientY - position.top - position.height / 2;
                 
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
+                // جذب الزر للماوس
+                gsap.to(btn, { x: x * 0.4, y: y * 0.4, duration: 0.5, ease: "power2.out" });
                 
-                const rotateX = ((y - centerY) / centerY) * -15; // زاوية الميل
-                const rotateY = ((x - centerX) / centerX) * 15;
-                
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                // تكبير الماوس
+                gsap.to(cursor, { scale: 3, backgroundColor: 'transparent', border: '1px solid #D4AF37', duration: 0.2 });
             });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-                card.style.transition = 'transform 0.5s ease'; // العودة بهدوء
-            });
-            
-            card.addEventListener('mouseenter', () => {
-                card.style.transition = 'none'; // إزالة التأخير عند التحريك
+
+            btn.addEventListener('mouseleave', function() {
+                // عودة الزر لمكانه
+                gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+                
+                // عودة الماوس لطبيعته
+                gsap.to(cursor, { scale: 1, backgroundColor: '#D4AF37', border: 'none', duration: 0.2 });
             });
         });
 
-        // 4. ظهور المنتجات تدريجياً عند النزول (Scroll Reveal)
-        const observerOptions = { threshold: 0.2 };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
+        // تكبير الماوس على الصور
+        document.querySelectorAll('.item-img-wrapper').forEach(img => {
+            img.addEventListener('mouseenter', () => gsap.to(cursor, {scale: 5, mixBlendMode: 'normal', backgroundColor: 'rgba(212, 175, 55, 0.2)'}));
+            img.addEventListener('mouseleave', () => gsap.to(cursor, {scale: 1, mixBlendMode: 'difference', backgroundColor: '#D4AF37'}));
+        });
+
+        // 3. أنيميشن البداية (Hero Animation)
+        gsap.from("#heroTitle", { y: 100, opacity: 0, duration: 1.5, ease: "power4.out", delay: 0.2 });
+        gsap.from("#heroSub", { y: 50, opacity: 0, duration: 1.5, ease: "power4.out", delay: 0.5 });
+        gsap.to("#heroBg", {
+            yPercent: 30,
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".hero",
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+
+        // 4. تأثير البارالاكس للصور (الصور تتحرك داخل الإطار ببطء)
+        const parallaxImages = document.querySelectorAll('.parallax-img');
+        parallaxImages.forEach(img => {
+            gsap.to(img, {
+                yPercent: 20,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: img.parentElement,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
                 }
             });
-        }, observerOptions);
+        });
 
-        cards.forEach(card => observer.observe(card));
+        // 5. ظهور النصوص الاحترافي عند التمرير
+        const items = document.querySelectorAll('.item');
+        items.forEach(item => {
+            gsap.from(item.querySelector('.item-content'), {
+                y: 100, opacity: 0, duration: 1.5, ease: "power3.out",
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 80%",
+                }
+            });
+        });
     </script>
 </body>
 </html>
