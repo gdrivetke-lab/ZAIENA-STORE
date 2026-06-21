@@ -3,25 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>متجر زينة | تفاعل الذرات الذهبية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Amiri:wght@400&display=swap" rel="stylesheet">
+    <title>متجر زينة | الإشعاع الذهبي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Amiri:wght@400&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #D4AF37;
-            --dark: #030305;
+            --gold: #FFD700; /* ذهبي مشع وصريح */
+            --dark-gold: #B8860B;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--dark);
+            /* خلفية مسرحية حالكة السواد مع هالة خفيفة جداً في المنتصف */
+            background-color: #000000;
+            background: radial-gradient(circle at center, #110d00 0%, #000000 60%);
             color: #fff;
             font-family: 'Amiri', serif;
-            overflow: hidden; /* نمنع التمرير لأنها شاشة تفاعلية */
-            touch-action: none; /* لمنع حركات المتصفح الافتراضية عند اللمس */
+            overflow: hidden;
+            touch-action: none;
         }
 
-        /* لوحة الرسم الفيزيائية */
+        /* لوحة الرسم الفيزيائية مع تأثير الإشعاع الخارجي */
         #particle-canvas {
             display: block;
             width: 100vw;
@@ -30,9 +32,11 @@
             top: 0;
             left: 0;
             z-index: 1;
+            /* سر الاحتراف: فلتر إشعاع يعتمد على كرت الشاشة لتوهج خيالي */
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4)) drop-shadow(0 0 45px rgba(215, 175, 0, 0.2));
         }
 
-        /* واجهة المستخدم (تطفو فوق الذرات) */
+        /* واجهة المستخدم */
         .ui-layer {
             position: absolute;
             top: 0; left: 0;
@@ -42,68 +46,74 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding: 40px 20px;
-            pointer-events: none; /* حتى يمرر اللمس للوحة الخلفية */
+            padding: 50px 20px;
+            pointer-events: none;
         }
 
         .header {
             font-family: 'Playfair Display', serif;
-            font-size: 14px;
-            letter-spacing: 6px;
-            color: rgba(212, 175, 55, 0.6);
+            font-size: 16px;
+            letter-spacing: 8px;
+            color: rgba(255, 215, 0, 0.7);
             text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
 
         .footer-action {
-            pointer-events: auto; /* تفعيل اللمس للزر فقط */
+            pointer-events: auto;
             text-align: center;
+            margin-bottom: 30px;
         }
 
         .enter-btn {
             display: inline-block;
-            padding: 15px 40px;
-            background: transparent;
+            padding: 18px 50px;
+            background: rgba(0, 0, 0, 0.5);
             color: var(--gold);
-            border: 1px solid var(--gold);
-            border-radius: 30px;
-            font-size: 18px;
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            border-radius: 40px;
+            font-size: 20px;
             text-decoration: none;
-            transition: all 0.4s ease;
-            backdrop-filter: blur(5px);
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .enter-btn:hover {
+            background: var(--gold);
+            color: #000;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+            transform: translateY(-3px);
         }
 
         .enter-btn:active {
-            background: var(--gold);
-            color: var(--dark);
             transform: scale(0.95);
         }
 
         .hint {
-            margin-top: 15px;
-            font-size: 12px;
-            color: #888;
-            letter-spacing: 2px;
-            animation: pulse 2s infinite;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #aaa;
+            letter-spacing: 3px;
+            animation: pulse 2.5s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
         }
     </style>
 </head>
 <body>
 
-    <!-- الشاشة القماشية التي سيرسم عليها الجافاسكربت ملايين الذرات -->
     <canvas id="particle-canvas"></canvas>
 
-    <!-- الواجهة الأمامية -->
     <div class="ui-layer">
-        <div class="header">Exclusive Collections</div>
+        <div class="header">La Collection Royale</div>
         
         <div class="footer-action">
-            <a href="#" class="enter-btn">ادخل إلى عالم زينة</a>
-            <div class="hint">المس الشاشة لتحريك ذرات الذهب</div>
+            <a href="#" class="enter-btn">اكتشف العظمة</a>
+            <div class="hint">المس الذهب لتحريكه</div>
         </div>
     </div>
 
@@ -115,9 +125,8 @@
         canvas.height = window.innerHeight;
 
         let particlesArray = [];
-        let mouse = { x: null, y: null, radius: 100 };
+        let mouse = { x: null, y: null, radius: 120 }; // زيادة قطر تأثير اللمس
 
-        // التفاعل مع الماوس واللمس (للهواتف)
         window.addEventListener('mousemove', function(event) {
             mouse.x = event.x;
             mouse.y = event.y;
@@ -128,39 +137,36 @@
             mouse.y = event.touches[0].clientY;
         });
 
-        window.addEventListener('mouseout', function() {
-            mouse.x = undefined;
-            mouse.y = undefined;
-        });
+        window.addEventListener('mouseout', function() { mouse.x = undefined; mouse.y = undefined; });
+        window.addEventListener('touchend', function() { mouse.x = undefined; mouse.y = undefined; });
 
-        window.addEventListener('touchend', function() {
-            mouse.x = undefined;
-            mouse.y = undefined;
-        });
+        function drawText() {
+            ctx.fillStyle = 'white';
+            // التكبير الهائل للاسم ليملأ الشاشة ويسيطر عليها
+            let fontSize = canvas.width < 600 ? 110 : 280; 
+            ctx.font = `900 ${fontSize}px 'Playfair Display', serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            // رفع النص قليلاً ليتوسط الشاشة البصرية بشكل أفضل
+            ctx.fillText('ZEINA', canvas.width / 2, canvas.height / 2.3);
+        }
 
-        // رسم النص وسحب إحداثيات البيكسلات لإنشاء الذرات
-        ctx.fillStyle = 'white';
-        // تعديل حجم الخط ليتناسب مع شاشات الجوال والكمبيوتر
-        let fontSize = canvas.width < 600 ? 60 : 150; 
-        ctx.font = `bold ${fontSize}px 'Playfair Display', serif`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('ZEINA', canvas.width / 2, canvas.height / 2.2);
-
-        const textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        drawText();
+        let textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
         class Particle {
             constructor(x, y) {
-                this.x = x + Math.random() * 20 - 10;
-                this.y = y + Math.random() * 20 - 10;
-                this.size = Math.random() * 2 + 0.5;
+                this.x = x + Math.random() * 30 - 15;
+                this.y = y + Math.random() * 30 - 15;
+                this.size = Math.random() * 2.5 + 0.5;
                 this.baseX = x;
                 this.baseY = y;
-                // كثافة مختلفة لكل ذرة لتعطي سرعة تناثر مختلفة
-                this.density = (Math.random() * 30) + 5; 
-                // لون ذهبي بدرجات عشوائية خفيفة
-                let opacity = Math.random() * 0.5 + 0.5;
-                this.color = `rgba(212, 175, 55, ${opacity})`;
+                this.density = (Math.random() * 40) + 5;
+                
+                // درجات ذهبية متوهجة وعشوائية لزيادة الواقعية
+                let opacity = Math.random() * 0.7 + 0.3;
+                let isBright = Math.random() > 0.8;
+                this.color = isBright ? `rgba(255, 245, 180, ${opacity})` : `rgba(255, 215, 0, ${opacity})`;
             }
 
             draw() {
@@ -172,12 +178,10 @@
             }
 
             update() {
-                // حساب المسافة بين لمسة المستخدم والذرة
                 let dx = mouse.x - this.x;
                 let dy = mouse.y - this.y;
                 let distance = Math.sqrt(dx * dx + dy * dy);
                 
-                // قوة الدفع والجاذبية
                 let forceDirectionX = dx / distance;
                 let forceDirectionY = dy / distance;
                 let maxDistance = mouse.radius;
@@ -185,19 +189,17 @@
                 let directionX = forceDirectionX * force * this.density;
                 let directionY = forceDirectionY * force * this.density;
 
-                // إذا كان المستخدم يلمس قريباً من الذرة، تتطاير
                 if (distance < mouse.radius) {
                     this.x -= directionX;
                     this.y -= directionY;
                 } else {
-                    // إذا ابتعد المستخدم، تعود الذرة لمكانها الأصلي كالمغناطيس
                     if (this.x !== this.baseX) {
                         let dx = this.x - this.baseX;
-                        this.x -= dx / 10;
+                        this.x -= dx / 12; // عودة أبطأ وأكثر نعومة
                     }
                     if (this.y !== this.baseY) {
                         let dy = this.y - this.baseY;
-                        this.y -= dy / 10;
+                        this.y -= dy / 12;
                     }
                 }
             }
@@ -205,9 +207,9 @@
 
         function init() {
             particlesArray = [];
-            // فحص كل بيكسل، إذا كان غير شفاف، ننشئ مكانه ذرة
-            for (let y = 0, y2 = textCoordinates.height; y < y2; y += 4) {
-                for (let x = 0, x2 = textCoordinates.width; x < x2; x += 4) {
+            // دقة أعلى (3 بدلاً من 4) لزيادة كثافة الذرات وبريقها
+            for (let y = 0, y2 = textCoordinates.height; y < y2; y += 3) {
+                for (let x = 0, x2 = textCoordinates.width; x < x2; x += 3) {
                     if (textCoordinates.data[(y * 4 * textCoordinates.width) + (x * 4) + 3] > 128) {
                         let positionX = x;
                         let positionY = y;
@@ -221,6 +223,10 @@
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // سر الاحتراف: يجعل الذرات المتداخلة تشع بقوة كالضوء الحقيقي
+            ctx.globalCompositeOperation = 'screen'; 
+            
             for (let i = 0; i < particlesArray.length; i++) {
                 particlesArray[i].draw();
                 particlesArray[i].update();
@@ -230,16 +236,10 @@
 
         animate();
 
-        // إعادة تشكيل الذرات عند تغيير حجم الشاشة أو تدوير الجوال
         window.addEventListener('resize', function() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            ctx.fillStyle = 'white';
-            fontSize = canvas.width < 600 ? 60 : 150; 
-            ctx.font = `bold ${fontSize}px 'Playfair Display', serif`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('ZEINA', canvas.width / 2, canvas.height / 2.2);
+            drawText();
             textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
             init();
         });
