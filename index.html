@@ -3,21 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر زينة | النخبة</title>
+    <title>متجر زينة | العرض السينمائي</title>
     <!-- خطوط فاخرة -->
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --gold: #D4AF37;
-            --dark: #0a0a0c;
+            --dark: #07070a;
             --text: #f0e6d2;
         }
 
-        * {
-            margin: 0; padding: 0; box-sizing: border-box;
-            cursor: none; /* إخفاء الماوس العادي */
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
 
         body {
             background-color: var(--dark);
@@ -26,154 +23,153 @@
             overflow-x: hidden;
         }
 
-        /* الماوس المخصص الاحترافي */
+        /* تأثير التشويش السينمائي (Film Grain) */
+        .noise {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 9999; opacity: 0.04;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Dissolve_Noise_Texture.png');
+            animation: noise 0.2s infinite;
+        }
+        @keyframes noise { 0% { transform: translate(0,0); } 10% { transform: translate(-5%,-5%); } 20% { transform: translate(-10%,5%); } 30% { transform: translate(5%,-10%); } 40% { transform: translate(-5%,15%); } 50% { transform: translate(-10%,5%); } 60% { transform: translate(15%,0); } 70% { transform: translate(0,15%); } 80% { transform: translate(3%,35%); } 90% { transform: translate(-10%,10%); } }
+
+        /* الماوس السحري */
         .custom-cursor {
-            position: fixed; top: 0; left: 0; width: 12px; height: 12px;
+            position: fixed; top: 0; left: 0; width: 15px; height: 15px;
             background-color: var(--gold); border-radius: 50%;
-            pointer-events: none; z-index: 9999;
+            pointer-events: none; z-index: 10000;
             transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background-color 0.3s;
             mix-blend-mode: difference;
+            transition: transform 0.1s;
         }
 
-        /* الهيدر السينمائي */
+        /* الهيدر */
         .hero {
             height: 100vh; display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            position: relative; overflow: hidden;
         }
-
         .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 8vw; font-weight: 400;
-            text-transform: uppercase; letter-spacing: 0.2em;
-            color: var(--text); z-index: 2;
-            mix-blend-mode: difference;
+            font-family: 'Playfair Display', serif; font-size: 8vw;
+            letter-spacing: 15px; color: var(--gold);
+        }
+        .hero p { font-size: 1.5vw; letter-spacing: 5px; margin-top: 10px; opacity: 0.7; }
+
+        /* حاوية البطاقات المتراكمة */
+        .cards-container {
+            padding: 5vh 5vw;
+            display: flex; flex-direction: column; gap: 5vh;
+            padding-bottom: 20vh;
         }
 
-        .hero .subtitle {
-            font-size: 1.5vw; color: var(--gold);
-            letter-spacing: 5px; margin-top: 20px; z-index: 2;
+        /* تصميم البطاقة الفاخرة */
+        .card {
+            position: sticky; top: 10vh; /* السر هنا: تثبيت البطاقة عند الوصول لأعلى الشاشة */
+            height: 80vh; width: 100%;
+            background: #111116; border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 20px; overflow: hidden;
+            display: flex; align-items: center;
+            transform-origin: top center; /* لضمان الانكماش من الأعلى */
+            box-shadow: 0 -20px 30px rgba(0,0,0,0.8);
         }
 
-        /* خلفية الهيدر البارالاكس */
-        .hero-bg {
-            position: absolute; top: -10%; left: -10%; width: 120%; height: 120%;
-            background: url('https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?q=80&w=2000&auto=format&fit=crop') center/cover;
-            opacity: 0.3; z-index: 1; filter: grayscale(50%);
+        .card-img {
+            width: 50%; height: 100%; object-fit: cover;
+            filter: brightness(0.7) contrast(1.1);
+            transition: filter 0.5s, transform 1s;
+        }
+        .card:hover .card-img { filter: brightness(1) contrast(1.2); transform: scale(1.05); }
+
+        .card-content {
+            width: 50%; padding: 5vw;
+            display: flex; flex-direction: column; justify-content: center;
         }
 
-        /* المعرض الفني غير المتماثل */
-        .gallery {
-            padding: 10vw 5vw; display: flex; flex-direction: column; gap: 15vw;
+        .card-tag {
+            font-family: 'Playfair Display', serif; font-size: 1vw;
+            color: var(--gold); letter-spacing: 4px; text-transform: uppercase;
+            margin-bottom: 15px;
         }
 
-        .item {
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 5vw; position: relative;
+        .card-title {
+            font-family: 'Playfair Display', serif; font-size: 4vw;
+            color: #fff; margin-bottom: 30px; line-height: 1.2;
         }
 
-        /* عكس اتجاه العناصر بالتبادل */
-        .item:nth-child(even) { flex-direction: row-reverse; }
+        .card-desc { font-size: 1.2vw; line-height: 1.8; color: #888; margin-bottom: 50px; }
 
-        .item-img-wrapper {
-            width: 45vw; height: 60vh; overflow: hidden;
-            position: relative;
+        /* زر الشراء المغناطيسي */
+        .buy-btn {
+            align-self: flex-start; padding: 15px 40px;
+            background: transparent; color: var(--gold);
+            border: 1px solid var(--gold); border-radius: 30px;
+            font-size: 1.2vw; text-decoration: none;
+            transition: all 0.4s; position: relative; overflow: hidden;
         }
-
-        .item-img {
-            width: 100%; height: 130%; /* أكبر من الحاوية لعمل البارالاكس */
-            object-fit: cover;
-            position: absolute; top: -15%; left: 0;
-            filter: brightness(0.8); transition: filter 0.5s;
+        .buy-btn::before {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%; background: var(--gold);
+            transition: all 0.4s; z-index: -1;
         }
+        .buy-btn:hover { color: var(--dark); border-color: transparent; }
+        .buy-btn:hover::before { left: 0; }
 
-        .item-img-wrapper:hover .item-img { filter: brightness(1.1); }
+        /* للبطاقات الفردية لتغيير الترتيب */
+        .card:nth-child(even) { flex-direction: row-reverse; }
 
-        .item-content {
-            width: 40vw; padding: 2vw;
-        }
-
-        .item-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 4vw; color: var(--gold); margin-bottom: 20px;
-        }
-
-        .item-desc {
-            font-size: 1.2vw; line-height: 2; color: #a0a0a0;
-            margin-bottom: 40px;
-        }
-
-        /* الزر المغناطيسي الفاخر */
-        .magnetic-btn {
-            display: inline-flex; align-items: center; justify-content: center;
-            width: 150px; height: 150px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 50%; text-decoration: none;
-            color: var(--gold); font-size: 1.2rem;
-            position: relative; transition: border-color 0.3s;
-        }
-
-        .magnetic-btn::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--gold); border-radius: 50%;
-            transform: scale(0); transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            z-index: -1;
-        }
-
-        .magnetic-btn:hover { color: var(--dark); border-color: var(--gold); }
-        .magnetic-btn:hover::before { transform: scale(1); }
-
-        /* الفوتر */
-        footer {
-            padding: 5vw; text-align: center; border-top: 1px solid rgba(255,255,255,0.05);
-            font-family: 'Playfair Display', serif; font-size: 2vw; color: var(--gold);
-        }
+        footer { text-align: center; padding: 5vh; color: #555; border-top: 1px solid #222; }
     </style>
 </head>
 <body>
 
+    <div class="noise"></div>
     <div class="custom-cursor"></div>
 
     <section class="hero">
-        <div class="hero-bg" id="heroBg"></div>
-        <h1 id="heroTitle">ZEINA</h1>
-        <div class="subtitle" id="heroSub">MAISON DE LUXE</div>
+        <h1>ZEINA</h1>
+        <p>فنّ الإهداء المتناهي</p>
     </section>
 
-    <section class="gallery">
+    <section class="cards-container">
         
-        <!-- قطعة 1 -->
-        <div class="item">
-            <div class="item-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1547996160-81dfa63595aa?q=80&w=1000&auto=format&fit=crop" class="item-img parallax-img" alt="Watch">
-            </div>
-            <div class="item-content">
-                <h2 class="item-title">الزمن المُلهم</h2>
-                <p class="item-desc">ساعات نادرة تُصاغ بتعقيدات ميكانيكية دقيقة، حيث يلتقي التراث السويسري مع الرؤية العصرية لتعكس هيبتك في كل ثانية.</p>
-                <a href="https://wa.me/972526177768?text=استفسار%20عن%20الساعات" class="magnetic-btn" target="_blank">اقتنِ القطعة</a>
+        <!-- البطاقة الأولى: الأقلام -->
+        <div class="card" id="card1">
+            <img src="https://images.unsplash.com/photo-1585336261022-680e295ce3fe?auto=format&fit=crop&w=1200&q=80" alt="قلم فاخر" class="card-img">
+            <div class="card-content">
+                <div class="card-tag">Signature Pens</div>
+                <h2 class="card-title">أقلام النخبة</h2>
+                <p class="card-desc">أداة كتابة تتجاوز وظيفتها لتصبح رمزاً للنفوذ. صُنعت من المعادن النفيسة وزُينت بتفاصيل تُجسد دقة الحرفية العالية لتوقيع يترك أثراً لا يُمحى.</p>
+                <a href="https://wa.me/972526177768?text=استفسار%20عن%20الأقلام%20الفاخرة" class="buy-btn" target="_blank">امتلك القطعة</a>
             </div>
         </div>
 
-        <!-- قطعة 2 -->
-        <div class="item">
-            <div class="item-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?q=80&w=1000&auto=format&fit=crop" class="item-img parallax-img" alt="Jewelry">
+        <!-- البطاقة الثانية: الحقائب -->
+        <div class="card" id="card2">
+            <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=1200&q=80" alt="حقيبة فاخرة" class="card-img">
+            <div class="card-content">
+                <div class="card-tag">Designer Bags</div>
+                <h2 class="card-title">حقائب استثنائية</h2>
+                <p class="card-desc">جلود مختارة بعناية فائقة، تُقص وتُخاط بأيدٍ خبيرة لتشكل تحفة فنية ترافقك. تصميم يجمع بين الجرأة الكلاسيكية والعملية المطلقة.</p>
+                <a href="https://wa.me/972526177768?text=استفسار%20عن%20الحقائب" class="buy-btn" target="_blank">امتلك القطعة</a>
             </div>
-            <div class="item-content">
-                <h2 class="item-title">بريق أبدي</h2>
-                <p class="item-desc">ألماس نقي ومجوهرات تُنحت يدوياً لتكون إرثاً تتناقله الأجيال. كل زاوية تعكس قصة من الفخامة التي لا تضاهى.</p>
-                <a href="https://wa.me/972526177768?text=استفسار%20عن%20المجوهرات" class="magnetic-btn" target="_blank">اقتنِ القطعة</a>
+        </div>
+
+        <!-- البطاقة الثالثة: صناديق الهدايا -->
+        <div class="card" id="card3">
+            <img src="https://images.unsplash.com/photo-1549465220-1a8b94384480?auto=format&fit=crop&w=1200&q=80" alt="صندوق هدايا" class="card-img">
+            <div class="card-content">
+                <div class="card-tag">Exclusive Gifts</div>
+                <h2 class="card-title">هدايا لا تُنسى</h2>
+                <p class="card-desc">صناديق مغلفة بالمخمل الفاخر، تضم بداخلها قطَعاً حصرية تُنسق خصيصاً لتليق بمن تحب. لأن الهدية من زينة هي رسالة بدون كلمات.</p>
+                <a href="https://wa.me/972526177768?text=استفسار%20عن%20الهدايا" class="buy-btn" target="_blank">امتلك القطعة</a>
             </div>
         </div>
 
     </section>
 
     <footer>
-        ZEINA EXCLUSIVE &copy; 2026
+        &copy; 2026 ZEINA. صُمم ببراعة لا متناهية.
     </footer>
 
-    <!-- استدعاء مكتبات الاحتراف العالمية -->
+    <!-- مكتبات التحريك العالمية -->
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -181,103 +177,43 @@
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // 1. التمرير السلس (Smooth Scroll)
+        // 1. التمرير السلس (Lenis)
         const lenis = new Lenis({
             duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            direction: 'vertical',
-            gestureDirection: 'vertical',
-            smooth: true,
-            mouseMultiplier: 1,
-            smoothTouch: false,
+            smooth: true
         });
-
         function raf(time) {
             lenis.raf(time);
             requestAnimationFrame(raf);
         }
         requestAnimationFrame(raf);
 
-        // 2. الماوس السحري والأزرار المغناطيسية
+        // 2. الماوس التفاعلي
         const cursor = document.querySelector('.custom-cursor');
-        const magneticBtns = document.querySelectorAll('.magnetic-btn');
-
         window.addEventListener('mousemove', (e) => {
-            gsap.to(cursor, {
-                x: e.clientX,
-                y: e.clientY,
-                duration: 0.1,
-                ease: "power2.out"
-            });
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, ease: "power2.out" });
         });
 
-        magneticBtns.forEach(btn => {
-            btn.addEventListener('mousemove', function(e) {
-                const position = btn.getBoundingClientRect();
-                const x = e.clientX - position.left - position.width / 2;
-                const y = e.clientY - position.top - position.height / 2;
-                
-                // جذب الزر للماوس
-                gsap.to(btn, { x: x * 0.4, y: y * 0.4, duration: 0.5, ease: "power2.out" });
-                
-                // تكبير الماوس
-                gsap.to(cursor, { scale: 3, backgroundColor: 'transparent', border: '1px solid #D4AF37', duration: 0.2 });
-            });
-
-            btn.addEventListener('mouseleave', function() {
-                // عودة الزر لمكانه
-                gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
-                
-                // عودة الماوس لطبيعته
-                gsap.to(cursor, { scale: 1, backgroundColor: '#D4AF37', border: 'none', duration: 0.2 });
-            });
-        });
-
-        // تكبير الماوس على الصور
-        document.querySelectorAll('.item-img-wrapper').forEach(img => {
-            img.addEventListener('mouseenter', () => gsap.to(cursor, {scale: 5, mixBlendMode: 'normal', backgroundColor: 'rgba(212, 175, 55, 0.2)'}));
-            img.addEventListener('mouseleave', () => gsap.to(cursor, {scale: 1, mixBlendMode: 'difference', backgroundColor: '#D4AF37'}));
-        });
-
-        // 3. أنيميشن البداية (Hero Animation)
-        gsap.from("#heroTitle", { y: 100, opacity: 0, duration: 1.5, ease: "power4.out", delay: 0.2 });
-        gsap.from("#heroSub", { y: 50, opacity: 0, duration: 1.5, ease: "power4.out", delay: 0.5 });
-        gsap.to("#heroBg", {
-            yPercent: 30,
-            ease: "none",
-            scrollTrigger: {
-                trigger: ".hero",
-                start: "top top",
-                end: "bottom top",
-                scrub: true
+        // 3. التأثير الخرافي: انكماش البطاقات وتراكمها (Stacking Cards Effect)
+        const cards = gsap.utils.toArray('.card');
+        
+        cards.forEach((card, index) => {
+            // لا نطبق التأثير على البطاقة الأخيرة لأنها لا تُغطى بشيء
+            if (index !== cards.length - 1) {
+                gsap.to(card, {
+                    scale: 0.9,          // يصغر حجم البطاقة
+                    opacity: 0.3,        // تخفت إضاءتها
+                    y: "-10vh",          // ترتفع قليلاً لتعطي عمقاً
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: cards[index + 1], // التأثير يبدأ عندما تلامس البطاقة التالية البطاقة الحالية
+                        start: "top bottom",
+                        end: "top 10vh",
+                        scrub: true,     // ربط الحركة بعجلة الماوس بشكل مباشر
+                    }
+                });
             }
-        });
-
-        // 4. تأثير البارالاكس للصور (الصور تتحرك داخل الإطار ببطء)
-        const parallaxImages = document.querySelectorAll('.parallax-img');
-        parallaxImages.forEach(img => {
-            gsap.to(img, {
-                yPercent: 20,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: img.parentElement,
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: true
-                }
-            });
-        });
-
-        // 5. ظهور النصوص الاحترافي عند التمرير
-        const items = document.querySelectorAll('.item');
-        items.forEach(item => {
-            gsap.from(item.querySelector('.item-content'), {
-                y: 100, opacity: 0, duration: 1.5, ease: "power3.out",
-                scrollTrigger: {
-                    trigger: item,
-                    start: "top 80%",
-                }
-            });
         });
     </script>
 </body>
