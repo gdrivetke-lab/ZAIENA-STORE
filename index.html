@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>متجر زينة | عالم من الفخامة اللامتناهية</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;700&family=Playfair+Display:wght@400;700&display=swap');
+        
+        * { box-sizing: border-box; }
+        body { 
+            margin: 0; 
+            /* خلفية ليلية ساحرة */
+            background: radial-gradient(circle at 50% 0%, #1a1a24 0%, #05050a 100%);
+            color: #e0dcd3; 
+            font-family: 'Amiri', serif; 
+            line-height: 1.8;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* --- تأثير غبار النجوم (Stardust) --- */
+        .stardust-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: #d4af37;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px rgba(212, 175, 55, 0.4);
+            animation: floatStar 15s infinite linear;
+            opacity: 0;
+        }
+
+        .star:nth-child(1) { width: 3px; height: 3px; left: 15%; animation-duration: 20s; animation-delay: 0s; }
+        .star:nth-child(2) { width: 5px; height: 5px; left: 45%; animation-duration: 25s; animation-delay: 3s; }
+        .star:nth-child(3) { width: 2px; height: 2px; left: 75%; animation-duration: 18s; animation-delay: 7s; }
+        .star:nth-child(4) { width: 4px; height: 4px; left: 85%; animation-duration: 22s; animation-delay: 2s; }
+        .star:nth-child(5) { width: 6px; height: 6px; left: 25%; animation-duration: 30s; animation-delay: 5s; }
+
+        @keyframes floatStar {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-20vh) scale(1.5); opacity: 0; }
+        }
+
+        /* الهيدر الأثيري */
+        .header {
+            text-align: center;
+            padding: 80px 20px;
+            background: transparent;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 { 
+            font-family: 'Cinzel', serif; /* خط روماني فائق الفخامة */
+            font-size: 5rem; 
+            color: #d4af37; 
+            margin: 0;
+            letter-spacing: 10px;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .subtitle { 
+            font-family: 'Playfair Display', serif;
+            font-style: italic; 
+            color: #a89f91; 
+            letter-spacing: 5px;
+            margin-top: 15px;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+        }
+
+        .main-wrapper { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 40px 20px 100px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* شبكة المنتجات بتأثير الزجاج (Glassmorphism) */
+        .luxury-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .luxury-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 25px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 2px;
+            text-align: center;
+            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .luxury-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            transition: 0.8s;
+        }
+
+        .luxury-card:hover::before {
+            left: 150%;
+        }
+
+        .luxury-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.2);
+            border-color: rgba(212, 175, 55, 0.5);
+        }
+
+        .category-tag {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            color: #d4af37;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        /* حاوية الصور عالية الدقة */
+        .image-container {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.2s ease;
+            filter: brightness(0.85) contrast(1.1);
+        }
+
+        .luxury-card:hover .product-image {
+            transform: scale(1.15);
+            filter: brightness(1) contrast(1.2);
+        }
+
+        .luxury-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #fff;
+            margin: 15px 0 10px 0;
+            font-weight: 400;
+        }
+
+        .product-description {
+            color: #a89f91;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            height: 55px;
+        }
+
+        /* زر الاستفسار الفاخر */
+        .inquire-btn { 
+            display: inline-block;
+            padding: 15px 40px; 
+            border: 1px solid rgba(212, 175, 55, 0.5); 
+            color: #d4af37; 
+            text-decoration: none; 
+            transition: 0.4s;
+            font-family: 'Amiri', serif;
+            font-size: 1.2rem;
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .inquire-btn:hover { 
+            background: #d4af37; 
+            color: #05050a; 
+            letter-spacing: 2px;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        footer { 
+            text-align: center; 
+            padding: 60px 20px;
+            background: #020204;
+            color: #666;
+            position: relative;
+            z-index: 10;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        footer .footer-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: rgba(212, 175, 55, 0.5);
+            letter-spacing: 5px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- تأثير غبار النجوم الساحر -->
+    <div class="stardust-container">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+    </div>
+
+    <header class="header">
+        <h1>ZEINA</h1>
+        <div class="subtitle">حيث يتوقف الزمن لتبدأ الأناقة</div>
+    </header>
+
+    <div class="main-wrapper">
+        
+        <div class="luxury-grid">
+            
+            <!-- الساعات الفاخرة -->
+            <div class="luxury-card">
+                <div class="category-tag">Horology Collection</div>
+                <div class="image-container">
+                    <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=800&q=80" alt="ساعات فاخرة" class="product-image">
+                </div>
+                <h3>ساعات النخبة</h3>
+                <p class="product-description">هندسة دقيقة وتصميم يتحدى الزمن، لمعصم يعكس الهيبة والوقار.</p>
+                <a href="https://wa.me/123456789?text=أهلاً،%20أود%20الاستفسار%20عن%20مجموعة%20الساعات%20الفاخرة%20والأسعار%20بالشيقل." class="inquire-btn" target="_blank">اكتشف القطعة</a>
+            </div>
+
+            <!-- الحقائب الأنيقة -->
+            <div class="luxury-card">
+                <div class="category-tag">Designer Bags</div>
+                <div class="image-container">
+                    <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=800&q=80" alt="حقائب أنيقة" class="product-image">
+                </div>
+                <h3>حقائب استثنائية</h3>
+                <p class="product-description">جلود طبيعية نادرة وحرفية يدوية تصنع لكِ رفيقاً يليق بإطلالتك.</p>
+                <a href="https://wa.me/123456789?text=أهلاً،%20أود%20الاستفسار%20عن%20مجموعة%20الحقائب%20والأسعار%20بالشيقل." class="inquire-btn" target="_blank">اكتشف القطعة</a>
+            </div>
+
+            <!-- الإكسسوارات والمجوهرات -->
+            <div class="luxury-card">
+                <div class="category-tag">Exquisite Jewels</div>
+                <div class="image-container">
+                    <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80" alt="إكسسوارات ساحرة" class="product-image">
+                </div>
+                <h3>بريق الإكسسوارات</h3>
+                <p class="product-description">قطع مصاغة بشغف لتخطف الأنظار، تتلألأ بتفاصيل تسرد قصة جمالك.</p>
+                <a href="https://wa.me/123456789?text=أهلاً،%20أود%20الاستفسار%20عن%20مجموعة%20الإكسسوارات%20والأسعار%20بالشيقل." class="inquire-btn" target="_blank">اكتشف القطعة</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-logo">ZEINA EXCLUSIVE</div>
+        &copy; 2026 زينة - عالم بلا حدود من الرقي.
+    </footer>
+
+</body>
+</html>
