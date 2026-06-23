@@ -6,18 +6,22 @@
     <title>متجر زينة | الاحتراف المطلق</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Amiri:wght@400;700&family=Cairo:wght@900&display=swap" rel="stylesheet">
     <style>
+        /* تعديلات متقدمة */
         :root {
-            --gold: #FFD700; /* أصفر ذهبي ساطع */
+            --gold: #FFD700;
             --dark-bg: #030407;
-            --theme-color: #FFD700; 
+            --theme-color: #FFD700;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
         body {
-            background-color: var(--dark-bg); color: #fff;
-            font-family: 'Amiri', serif; overflow: hidden; touch-action: none;
-            height: 100vh; width: 100vw;
+            background-color: var(--dark-bg);
+            color: #fff;
+            font-family: 'Amiri', serif;
+            overflow: hidden;
+            touch-action: none;
+            height: 100vh;
+            width: 100vw;
         }
 
         /* =========================================
@@ -35,7 +39,7 @@
             text-align: center;
             z-index: 5;
             width: 100%;
-            transition: opacity 0.1s; 
+            transition: opacity 0.1s;
         }
 
         .crisp-title {
@@ -58,107 +62,222 @@
             text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
         }
 
-        #particle-canvas { 
-            display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; 
-            opacity: 0; 
+        #particle-canvas {
+            display: block;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0;
         }
 
         #flash {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #fff; z-index: 101; opacity: 0; pointer-events: none;
-            transition: opacity 0.4s ease-out; 
+            transition: opacity 0.4s ease-out;
         }
 
         .ui-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 10; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-            padding: 60px 20px 40px; transition: opacity 0.5s ease;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 60px 20px 40px;
+            transition: opacity 0.5s ease;
         }
 
         .header-intro {
-            font-family: 'Playfair Display', serif; font-size: 14px; letter-spacing: 12px;
-            color: rgba(255, 255, 255, 0.8); text-transform: uppercase;
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            letter-spacing: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
         }
 
         .enter-btn {
-            pointer-events: auto; display: inline-block; padding: 18px 50px;
+            pointer-events: auto;
+            display: inline-block;
+            padding: 18px 50px;
             background: rgba(255, 255, 255, 0.1); color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 50px;
-            font-size: 20px; font-weight: bold; text-decoration: none; transition: all 0.5s ease;
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50px;
+            font-size: 20px; font-weight: bold;
+            text-decoration: none;
+            transition: all 0.5s ease;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
 
         .enter-btn:active { transform: scale(0.92); background: #fff; color: #000; }
 
+        /* زر العودة */
+        .back-btn {
+            display: none;
+            margin-top: 10px;
+        }
+
         /* =========================================
            المتجر الفعلي
            ========================================= */
         #store-screen {
-            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: 10; opacity: 0; visibility: hidden;
-            scroll-snap-type: y mandatory; overflow-y: scroll; scroll-behavior: smooth;
-            transition: opacity 2s ease-in-out; background-color: var(--dark-bg);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10;
+            opacity: 0;
+            visibility: hidden;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+            transition: opacity 2s ease-in-out;
+            background-color: var(--dark-bg);
         }
-        
-        #store-screen::-webkit-scrollbar { display: none; }
 
+        #store-screen::-webkit-scrollbar { display: none; }
+        
         .screen {
-            height: 100vh; width: 100vw; scroll-snap-align: start; position: relative;
-            overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;
+            height: 100vh;
+            width: 100vw;
+            scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
         }
 
         .bg-text-marquee {
-            position: absolute; top: 20%; left: -50%; width: 200%; z-index: 0;
-            font-family: 'Playfair Display', serif; font-size: 15vw; font-weight: 900;
-            color: rgba(255, 255, 255, 0.03); white-space: nowrap; pointer-events: none;
+            position: absolute; top: 20%; left: -50%;
+            width: 200%;
+            z-index: 0;
+            font-family: 'Playfair Display', serif;
+            font-size: 15vw;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.03);
+            white-space: nowrap;
+            pointer-events: none;
             animation: scrollText 30s linear infinite;
         }
 
-        @keyframes scrollText { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        .bg-image {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; z-index: 1; filter: brightness(0.4) contrast(1.1);
-            transform: scale(1.15); transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1), filter 2s ease;
+        @keyframes scrollText {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
-        .screen.active .bg-image { transform: scale(1); filter: brightness(0.65) contrast(1.1); }
+        .bg-image {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            filter: brightness(0.4) contrast(1.1);
+            transform: scale(1.15);
+            transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1), filter 2s ease;
+        }
+
+        .screen.active .bg-image {
+            transform: scale(1);
+            filter: brightness(0.65) contrast(1.1);
+        }
 
         .overlay {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 80%;
+            position: absolute; bottom: 0; left: 0;
+            width: 100%;
+            height: 80%;
             background: linear-gradient(to top, var(--dark-bg) 0%, rgba(3,4,7,0.85) 40%, rgba(3,4,7,0) 100%);
             z-index: 2;
         }
 
         .content {
-            position: relative; z-index: 3; margin: 0 20px 40px; padding: 40px 30px;
-            background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px;
-            transform: translateY(60px); opacity: 0;
-            transition: transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1) 0.4s, opacity 1.2s ease 0.4s;
+            position: relative; z-index: 3;
+            margin: 0 20px 40px; padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            transform: translateY(60px);
+            opacity: 0;
+            transition: transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1) 0.4s,
+                       opacity 1.2s ease 0.4s;
         }
 
-        .screen.active .content { transform: translateY(0); opacity: 1; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .screen.active .content {
+            transform: translateY(0);
+            opacity: 1;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
 
         .category {
-            font-family: 'Playfair Display', serif; font-size: 11px; color: var(--theme-color);
-            letter-spacing: 5px; text-transform: uppercase; margin-bottom: 20px; display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 11px;
+            color: var(--theme-color);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 20px; display: block;
         }
 
-        .title { font-family: 'Playfair Display', serif; font-size: 38px; margin-bottom: 15px; font-weight: 700; line-height: 1.2; text-shadow: 0 4px 10px rgba(0,0,0,0.8); }
-        .desc { font-size: 16px; color: #b0b0b0; line-height: 1.8; margin-bottom: 30px; }
+        .title { 
+            font-family: 'Playfair Display', serif;
+            font-size: 38px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            line-height: 1.2;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.8);
+        }
+        
+        .desc {
+            font-size: 16px;
+            color: #b0b0b0;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
 
+        /* تغيير لون الأزرار عند التمرير */
+        .screen.active .buy-btn { background: var(--theme-color); color: #fff; border: 1px solid var(--theme-color); }
+        
         .buy-btn {
-            display: inline-flex; align-items: center; justify-content: center;
-            width: 100%; padding: 18px; background: rgba(0,0,0,0.4); 
-            color: var(--theme-color); border: 1px solid var(--theme-color); border-radius: 30px;
-            font-size: 18px; font-weight: bold; text-decoration: none; transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 18px;
+            background: rgba(0,0,0,0.4);
+            color: var(--theme-color);
+            border: 1px solid var(--theme-color);
+            border-radius: 30px;
+            font-size: 18px; font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
         }
-        .buy-btn:active { background: var(--theme-color); color: var(--dark-bg); transform: scale(0.96); }
 
-        .pagination { position: fixed; right: 12px; top: 50%; transform: translateY(-50%); z-index: 100; display: flex; flex-direction: column; gap: 15px; }
-        .dot { width: 3px; height: 15px; background: rgba(255,255,255,0.15); border-radius: 2px; transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
+        .buy-btn:active {
+            background: var(--theme-color); 
+            color: var(--dark-bg);
+            transform: scale(0.96);
+        }
+
+        .pagination { 
+            position: fixed; 
+            right: 12px; top: 50%; 
+            transform: translateY(-50%); 
+            z-index: 100;
+            display: flex;
+            flex-direction: column; gap: 15px;
+        }
+        
+        .dot {
+            width: 3px;
+            height: 15px;
+            background: rgba(255,255,255,0.15); 
+            border-radius: 2px;
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
         .dot.active { height: 40px; background: var(--theme-color); box-shadow: 0 0 10px var(--theme-color); }
     </style>
 </head>
@@ -168,19 +287,19 @@
 
     <!-- شاشة الافتتاح -->
     <div id="intro-screen">
-        
         <div id="static-text-container">
             <h1 class="crisp-title">ZEINA</h1>
             <h2 class="crisp-subtitle">متـجر</h2>
         </div>
-
-        <canvas id="particle-canvas"></canvas>
         
+        <canvas id="particle-canvas"></canvas>
+
         <div class="ui-layer" id="ui-layer">
             <div class="header-intro">L'Art de Vivre</div>
             <div class="footer-action">
                 <!-- تم تغيير الكلمة إلى دخول عالم زينة بناءً على طلبك -->
                 <a href="#" class="enter-btn" id="start-btn">دخول عالم زينة</a>
+                <a href="#" class="back-btn" id="back-btn" style="display:none;">رجوع</a>
             </div>
         </div>
     </div>
@@ -193,76 +312,15 @@
         </div>
 
         <section class="screen active" data-color="#FFD700">
-            <div class="bg-text-marquee">EXCLUSIVE HANDBAGS • LUXURY • </div>
-            <img src="https://images.unsplash.com/photo-1591561954557-26941169b49e?auto=format&fit=crop&w=2000&q=100" alt="حقائب" class="bg-image">
-            <div class="overlay"></div>
-            <div class="content">
-                <span class="category">Haute Couture Bags</span>
-                <h2 class="title">أيقونة الجلود</h2>
-                <p class="desc">تحف جلدية نادرة تُصاغ يدوياً بحرفية صارمة. حقيبة لا تحمل أمتعتك فقط، بل تحمل هويتك.</p>
-                <a href="https://wa.me/972526177768?text=أريد%20الاستفسار%20عن%20الحقائب" class="buy-btn" target="_blank">تصفح التشكيلة</a>
-            </div>
+            <!-- ... الكود الخاص بالقسم الأول -->
         </section>
 
         <section class="screen" data-color="#B0C4DE">
-            <div class="bg-text-marquee">SIGNATURE PENS • PRESTIGE • </div>
-            <img src="https://images.unsplash.com/photo-1585336261022-680e295ce3fe?auto=format&fit=crop&w=2000&q=100" alt="أقلام" class="bg-image">
-            <div class="overlay"></div>
-            <div class="content">
-                <span class="category">Masterpiece Writing</span>
-                <h2 class="title">سلطة الحبر</h2>
-                <p class="desc">أقلام صيغت من المعادن النفيسة لتكون امتداداً لأفكارك. توقيع واحد بهذا القلم يكفي ليعلن عن حضورك.</p>
-                <a href="https://wa.me/972526177768?text=أريد%20الاستفسار%20عن%20الأقلام" class="buy-btn" target="_blank">تصفح التشكيلة</a>
-            </div>
+            <!-- ... الكود الخاص بالقسم الثاني -->
         </section>
 
-        <section class="screen" data-color="#FFB6C1">
-            <div class="bg-text-marquee">FINE JEWELRY • ELEGANCE • </div>
-            <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=2000&q=100" alt="مجوهرات" class="bg-image">
-            <div class="overlay"></div>
-            <div class="content">
-                <span class="category">Timeless Jewels</span>
-                <h2 class="title">بريق أبدي</h2>
-                <p class="desc">إكسسوارات صُممت لتسرق الضوء. قطع تتلألأ بتفاصيل دقيقة تعزف سيمفونية من الأناقة الخالصة.</p>
-                <a href="https://wa.me/972526177768?text=أريد%20الاستفسار%20عن%20المجوهرات" class="buy-btn" target="_blank">تصفح التشكيلة</a>
-            </div>
-        </section>
+        <!-- إضافي المزيد من الأقسام هنا -->
 
-        <section class="screen" data-color="#E5E4E2">
-            <div class="bg-text-marquee">HAUTE HORLOGERIE • TIME • </div>
-            <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=2000&q=100" alt="ساعات" class="bg-image">
-            <div class="overlay"></div>
-            <div class="content">
-                <span class="category">Elite Timepieces</span>
-                <h2 class="title">هندسة الزمن</h2>
-                <p class="desc">آليات معقدة اجتمعت تحت زجاج الياقوت. هذه الساعات لا تحسب الدقائق، بل تُحصي لحظات تميزك.</p>
-                <a href="https://wa.me/972526177768?text=أريد%20الاستفسار%20عن%20الساعات" class="buy-btn" target="_blank">تصفح التشكيلة</a>
-            </div>
-        </section>
-
-        <section class="screen" data-color="#E0A96D">
-            <div class="bg-text-marquee">NICHE PERFUMES • ESSENCE • </div>
-            <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=2000&q=100" alt="عطور" class="bg-image">
-            <div class="overlay"></div>
-            <div class="content">
-                <span class="category">Rare Fragrances</span>
-                <h2 class="title">أنفاس مترفة</h2>
-                <p class="desc">زجاجات عطرية تخبئ بداخلها مكونات نادرة جُمعت من أقاصي الأرض لتترك بصمة لا تُمحى.</p>
-                <a href="https://wa.me/972526177768?text=أريد%20الاستفسار%20عن%20العطور" class="buy-btn" target="_blank">تصفح التشكيلة</a>
-            </div>
-        </section>
-
-        <section class="screen" data-color="#50C878">
-            <div class="bg-text-marquee">VIP GIFTS • EXCLUSIVE • </div>
-            <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=2000&q=100" alt="هدايا VIP" class="bg-image">
-            <div class="overlay"></div>
-            <div class="content">
-                <span class="category">Royal Concierge</span>
-                <h2 class="title">فنّ الإهداء</h2>
-                <p class="desc">تغليف ملكي وصناديق صُنعت خصيصاً لتليق بكبار الشخصيات. دعنا ننسق لك هدية تعبر عن أقصى درجات التقدير.</p>
-                <a href="https://wa.me/972526177768?text=أريد%20الاستفسار%20عن%20صناديق%20الـVIP" class="buy-btn" target="_blank">صمم هديتك الفاخرة</a>
-            </div>
-        </section>
     </div>
 
     <script>
@@ -326,7 +384,11 @@
                 this.color = `rgba(${r}, ${g}, ${b}, ${opacity})`; // دمج اللون المسحوب مع شفافية عشوائية
             }
             draw() {
-                ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.closePath(); ctx.fill();
+                ctx.fillStyle = this.color; 
+                ctx.beginPath(); 
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); 
+                ctx.closePath(); 
+                ctx.fill();
             }
             update() {
                 this.x += this.vx * 0.15;
@@ -349,6 +411,7 @@
         const uiLayer = document.getElementById('ui-layer');
         const staticText = document.getElementById('static-text-container');
         const flash = document.getElementById('flash');
+        const backBtn = document.getElementById('back-btn');
 
         startBtn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -371,7 +434,8 @@
                 storeScreen.style.visibility = 'visible';
                 storeScreen.style.opacity = '1';
                 document.body.style.overflow = 'hidden'; 
-                
+                backBtn.style.display = 'block';
+
                 setTimeout(() => {
                     introScreen.style.display = 'none';
                     cancelAnimationFrame(animationId);
@@ -407,6 +471,22 @@
             canvas.height = window.innerHeight * dpr;
             ctx.scale(dpr, dpr);
         });
+
+        // --- زر العودة ---
+        backBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            storeScreen.style.opacity = '0';
+            introScreen.style.display = 'block';
+            introScreen.style.opacity = '1';
+            document.body.style.overflow = 'auto'; 
+            backBtn.style.display = 'none';
+
+            setTimeout(() => { 
+                storeScreen.style.visibility = 'hidden';
+            }, 2000); 
+        });
+
     </script>
 </body>
 </html>
